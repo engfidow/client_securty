@@ -12,6 +12,8 @@ import Settings from './pages/Settings';
 
 import Sidebar from './partials/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/Layout';
+import DistrictUsers from './pages/DistrictUsers';
 
 function App() {
   const location = useLocation();
@@ -27,53 +29,31 @@ function App() {
 
   return (
     <>
-      {/* Show sidebar only when logged in */}
-      {location.pathname !== '/login' && location.pathname !== '/register' && (
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      )}
+    
+     
+    <Routes>
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
 
-      <div className="relative flex overflow-hidden">
-        <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            {/* Protected routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/citizens"
-              element={
-                <ProtectedRoute>
-                  <Citizens />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/reports"
-              element={
-                <ProtectedRoute>
-                  <Reports />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </div>
-      </div>
+  <Route
+    path="/"
+    element={
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    }
+  >
+    <Route index element={<Dashboard />} />
+    <Route path="citizens" element={<Citizens />} />
+    <Route path="reports" element={<Reports />} />
+    <Route path="settings" element={<Settings />} />
+    <Route path="/district-users" element={<DistrictUsers />} />
+
+  </Route>
+</Routes>
+    
+
+      
     </>
   );
 }

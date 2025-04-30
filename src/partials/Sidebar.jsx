@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import {
+  MdDashboard,
+  MdPeople,
+  MdMap,
+  MdReport,
+  MdAccountCircle,
+  MdLogout,
+} from 'react-icons/md';
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
@@ -10,6 +18,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     localStorage.getItem('sidebar-expanded') === 'true'
   );
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  const role = user?.role || 'police';
 
   useEffect(() => {
     const clickHandler = ({ target }) => {
@@ -35,6 +46,20 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
     navigate('/login');
   };
 
+  const navItem = (to, icon, label) => (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `flex items-center gap-2 p-2 rounded ${
+          isActive ? 'bg-violet-100 text-violet-700' : 'text-gray-700 hover:bg-gray-100'
+        }`
+      }
+    >
+      {icon}
+      <span>{label}</span>
+    </NavLink>
+  );
+
   return (
     <div className="min-w-fit">
       <div
@@ -46,9 +71,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
       <div
         ref={sidebar}
-        className={`flex flex-col absolute z-40 left-0 top-0 h-screen w-64 bg-white dark:bg-gray-800 p-4 transition-all duration-200 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-64'
-        }`}
+        className={`flex flex-col z-40 h-screen w-64 bg-white dark:bg-gray-800 p-4 border-r transition-all duration-200 ease-in-out
+        ${sidebarOpen ? 'block' : 'hidden lg:block'}
+      `}
       >
         {/* Logo */}
         <div className="flex justify-between items-center mb-10">
@@ -64,51 +89,23 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
         {/* Nav */}
         <nav className="space-y-2">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `block p-2 rounded ${
-                isActive ? 'bg-violet-100 text-violet-700' : 'text-gray-700 hover:bg-gray-100'
-              }`
-            }
-          >
-            📊 Dashboard
-          </NavLink>
-          <NavLink
-            to="/citizens"
-            className={({ isActive }) =>
-              `block p-2 rounded ${
-                isActive ? 'bg-violet-100 text-violet-700' : 'text-gray-700 hover:bg-gray-100'
-              }`
-            }
-          >
-            👥 Citizens
-          </NavLink>
-          <NavLink
-            to="/reports"
-            className={({ isActive }) =>
-              `block p-2 rounded ${
-                isActive ? 'bg-violet-100 text-violet-700' : 'text-gray-700 hover:bg-gray-100'
-              }`
-            }
-          >
-            📝 Reports
-          </NavLink>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) =>
-              `block p-2 rounded ${
-                isActive ? 'bg-violet-100 text-violet-700' : 'text-gray-700 hover:bg-gray-100'
-              }`
-            }
-          >
-            ⚙️ Settings
-          </NavLink>
+          {navItem('/', <MdDashboard size={20} />, 'Dashboard')}
+          {navItem('/citizens', <MdPeople size={20} />, 'Citizens Report')}
+          {role === 'admin' && navItem('/district-users', <MdMap size={20} />, 'District Users')}
+
+
+          {role === 'admin'
+            ? navItem('/reports', <MdReport size={20} />, 'Reports')
+            : navItem('/districts', <MdMap size={20} />, 'District Reports')}
+
+          {navItem('/profile', <MdAccountCircle size={20} />, 'Profile')}
+
           <button
             onClick={logout}
-            className="block p-2 w-full text-left rounded text-red-600 hover:bg-red-50 mt-4"
+            className="flex items-center gap-2 p-2 w-full text-left rounded text-red-600 hover:bg-red-50 mt-4"
           >
-            🚪 Logout
+            <MdLogout size={20} />
+            <span>Logout</span>
           </button>
         </nav>
       </div>
