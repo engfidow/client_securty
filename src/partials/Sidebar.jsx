@@ -90,8 +90,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Nav */}
         <nav className="space-y-2">
           {navItem('/', <MdDashboard size={20} />, 'Dashboard')}
-          {navItem('/citizens', <MdPeople size={20} />, 'Citizens Report')}
+          {navItem('/citizens-report', <MdPeople size={20} />, 'Citizens Report')}
           {role === 'admin' && navItem('/district-users', <MdMap size={20} />, 'District Users')}
+          {role === 'admin' && navItem('/citizens', <MdMap size={20} />, 'citizens')}
 
 
           {role === 'admin'

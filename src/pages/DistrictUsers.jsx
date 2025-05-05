@@ -7,6 +7,7 @@ const DistrictUsers = () => {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -38,6 +39,8 @@ const DistrictUsers = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsersByDistrict(res.data);
+      const flattened = Object.values(res.data).flat();
+      setAllUsers(flattened);
     } catch (err) {
       console.error('Error fetching users by district:', err);
     } finally {
@@ -151,36 +154,35 @@ const DistrictUsers = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        Object.entries(usersByDistrict).map(([district, users]) => (
-          <div key={district} className="mb-8 bg-white p-4 rounded shadow-md">
-            <h3 className="text-lg font-semibold text-violet-500 mb-4">{district}</h3>
-            <table className="w-full text-sm text-left border">
-              <thead className="bg-violet-100 text-violet-700">
-                <tr>
-                  <th className="p-2">Name</th>
-                  <th className="p-2">Email</th>
-                  <th className="p-2">Phone</th>
-                  <th className="p-2">Status</th>
-                  <th className="p-2">Actions</th>
+        <div >
+          <table className="w-full border text-sm text-left">
+            <thead className="bg-violet-100 text-violet-700">
+              <tr>
+                <th className="p-2">Name</th>
+                <th className="p-2">Email</th>
+                <th className="p-2">Phone</th>
+                <th className="p-2">District</th>
+                <th className="p-2">Status</th>
+                <th className="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {allUsers.map((user) => (
+                <tr key={user._id} className="border-t">
+                  <td className="p-2">{user.name}</td>
+                  <td className="p-2">{user.email}</td>
+                  <td className="p-2">{user.phone}</td>
+                  <td className="p-2">{user.district}</td>
+                  <td className="p-2">{user.status}</td>
+                  <td className="p-2 flex gap-2">
+                    <button onClick={() => openModal(user)} className="bg-green-600 p-2 rounded-[5px] text-white hover:underline"><MdEdit /></button>
+                    <button onClick={() => handleDelete(user._id)} className="bg-red-600 p-2 rounded-[5px] text-white hover:underline"><MdDelete /></button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user._id} className="border-t">
-                    <td className="p-2">{user.name}</td>
-                    <td className="p-2">{user.email}</td>
-                    <td className="p-2">{user.phone}</td>
-                    <td className="p-2">{user.status}</td>
-                    <td className="p-2 flex gap-2">
-                      <button onClick={() => openModal(user)} className="text-blue-600 hover:underline"><MdEdit /></button>
-                      <button onClick={() => handleDelete(user._id)} className="text-red-600 hover:underline"><MdDelete /></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {modalOpen && (

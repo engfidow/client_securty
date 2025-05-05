@@ -44,7 +44,7 @@ function App() {
     }
   >
     <Route index element={<Dashboard />} />
-    <Route path="citizens" element={<Citizens />} />
+    <Route path="citizens-report" element={<Citizens />} />
     <Route path="reports" element={<Reports />} />
     <Route path="settings" element={<Settings />} />
     <Route path="/district-users" element={<DistrictUsers />} />
