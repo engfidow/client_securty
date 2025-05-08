@@ -6,7 +6,7 @@ import './charts/ChartjsConfig';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Citizens from './pages/Citizens';
+
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
@@ -14,6 +14,8 @@ import Sidebar from './partials/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import DistrictUsers from './pages/DistrictUsers';
+import Citizens from './pages/Citizensreport';
+import CitizenList from './pages/Citizen';
 
 function App() {
   const location = useLocation();
@@ -45,6 +47,7 @@ function App() {
   >
     <Route index element={<Dashboard />} />
     <Route path="citizens-report" element={<Citizens />} />
+    <Route path="citizens" element={<CitizenList />} />
     <Route path="reports" element={<Reports />} />
     <Route path="settings" element={<Settings />} />
     <Route path="/district-users" element={<DistrictUsers />} />
