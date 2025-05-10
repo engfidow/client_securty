@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CitizenSkeleton = ({ rows = 5 }) => {
+const LoadingSkeleton = ({ rows = 5 }) => {
   return (
     <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded shadow">
       <table className="min-w-full text-sm text-left border dark:border-gray-700">
@@ -45,4 +45,4 @@ const CitizenSkeleton = ({ rows = 5 }) => {
   );
 };
 
-export default CitizenSkeleton;
+export default LoadingSkeleton;
