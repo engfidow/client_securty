@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { MdEdit, MdDelete, MdAddCircle } from 'react-icons/md';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 
 const DistrictUsers = () => {
   const [usersByDistrict, setUsersByDistrict] = useState({});
@@ -152,7 +153,7 @@ const DistrictUsers = () => {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+       <LoadingSkeleton rows={6} />
       ) : (
         <div >
           <table className="w-full border text-sm text-left">
