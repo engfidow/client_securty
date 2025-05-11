@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 
 const CitizenList = () => {
   const [citizens, setCitizens] = useState([]);
@@ -87,7 +88,7 @@ const CitizenList = () => {
       )}
 
       {loading ? (
-        <p className="text-gray-700 dark:text-gray-300">Loading...</p>
+       <LoadingSkeleton rows={2} />
       ) : (
         <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded shadow">
           <table className="min-w-full text-sm text-left border dark:border-gray-700">
