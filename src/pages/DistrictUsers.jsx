@@ -23,12 +23,29 @@ const DistrictUsers = () => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  const districts = [
-    "Abdiaziz", "Bondhere", "Daynile", "Dharkenley", "Hamar Jajab",
-    "Hamar Weyne", "Hodan", "Howlwadaag", "Kahda", "Karaan",
-    "Shangani", "Shibis", "Waberi", "Wadajir", "Warta Nabadda", "Yaqshid"
+ const districts = [
+      "Abdiaziz",
+  "Bondhere",
+  "Daynile",
+  "Dharkenley",
+  "Daaru-salaam",
+  "Hamar Jajab",
+  "Hamar Weyne",
+  "Hodan",
+  "Howlwadaag",
+  "Karaan",
+  "Shibis",
+  "Shangani",
+  "Waberi",
+  "Wadajir",
+  "Yaqshid",
+  "Warta Nabadda",
+  "Hiliwaa",
+  "Garasbaaley",
+   "Gubadleey",
+  "Kahda"
+ 
   ];
-
   useEffect(() => {
     fetchUsers();
   }, []);
