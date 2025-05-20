@@ -14,14 +14,15 @@ import Sidebar from './partials/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import DistrictUsers from './pages/DistrictUsers';
-import Citizens from './pages/Citizensreport';
+
 import CitizenList from './pages/Citizen';
+import CrimeReport from './pages/CrimeReport';
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     document.querySelector('html').style.scrollBehavior = 'auto';
@@ -46,7 +47,7 @@ function App() {
     }
   >
     <Route index element={<Dashboard />} />
-    <Route path="citizens-report" element={<Citizens />} />
+    <Route path="crime-reports" element={<CrimeReport />} />
     <Route path="citizens" element={<CitizenList />} />
     <Route path="reports" element={<Reports />} />
     <Route path="settings" element={<Settings />} />
