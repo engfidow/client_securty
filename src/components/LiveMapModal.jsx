@@ -10,6 +10,7 @@ const LiveMapModal = ({ reportLocation, onClose }) => {
     navigator.geolocation.watchPosition(
       (position) => {
         setMyLocation([position.coords.latitude, position.coords.longitude]);
+        console.log(myLocation)
       },
       (err) => console.error('Geolocation error:', err),
       { enableHighAccuracy: true, maximumAge: 10000 }
@@ -17,6 +18,7 @@ const LiveMapModal = ({ reportLocation, onClose }) => {
   }, []);
 
   const reportLatLng = reportLocation?.split(',').map(Number);
+  console.log(reportLatLng)
 
   const userIcon = new L.Icon({
     iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',

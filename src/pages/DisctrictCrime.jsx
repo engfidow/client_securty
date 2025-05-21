@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import LiveMapModal from '../components/LiveMapModal';
 import ReportPreviewModal from '../components/ReportPreviewModal';
 
-const CrimeReport = () => {
+const DisctrictCrime = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
@@ -18,15 +18,21 @@ const CrimeReport = () => {
 
 
   const fetchReports = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/reports');
-      setReports(res.data);
-    } catch (err) {
-      console.error('Failed to load reports:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userId = user?._id;
+
+  if (!userId) return console.error('User not found in localStorage');
+
+  try {
+    const res = await axios.get(`http://localhost:5000/api/reports/distrct/crime/${userId}`);
+    setReports(res.data);
+  } catch (err) {
+    console.error('Failed to load reports:', err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchReports();
@@ -149,4 +155,4 @@ const CrimeReport = () => {
   );
 };
 
-export default CrimeReport;
+export default DisctrictCrime;

@@ -89,17 +89,23 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
         {/* Nav */}
         <nav className="space-y-2">
-          {navItem('/', <MdDashboard size={20} />, 'Dashboard')}
-          {navItem('/crime-reports', <MdPeople size={20} />, 'Crime Reports')}
+          {role === 'admin' && navItem('/', <MdDashboard size={20} />, 'Dashboard')}
+          
+          {role === 'admin' &&navItem('/crime-reports', <MdPeople size={20} />, 'Crime Reports')}
           {role === 'admin' && navItem('/district-users', <MdMap size={20} />, 'Manage Users')}
           {role === 'admin' && navItem('/citizens', <MdMap size={20} />, 'citizens')}
 
 
-          {role === 'admin'
-            ? navItem('/reports', <MdReport size={20} />, 'Reports')
-            : navItem('/districts', <MdMap size={20} />, 'District Reports')}
+          {role === 'admin' && navItem('/admin-report', <MdReport size={20} />, 'Reports')}
 
-          {navItem('/profile', <MdAccountCircle size={20} />, 'Profile')}
+        
+
+          {role === 'police' && navItem('/district-dashboard', <MdDashboard size={20} />, 'Dashboard')}
+          {role === 'police' &&navItem('/district-crime-reports', <MdPeople size={20} />, 'Crime Reports')}
+          {role === 'police' &&navItem('/district-branches', <MdPeople size={20} />, 'Distric Branches')}
+
+
+            {navItem('/profile', <MdAccountCircle size={20} />, 'Profile')}
 
           <button
             onClick={logout}

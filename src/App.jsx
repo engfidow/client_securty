@@ -17,6 +17,11 @@ import DistrictUsers from './pages/DistrictUsers';
 
 import CitizenList from './pages/Citizen';
 import CrimeReport from './pages/CrimeReport';
+import AdminReport from './pages/AdminReport';
+import Profile from './pages/Profile';
+import DistrictDashboard from './pages/DistrictDashboard';
+import DisctrictCrime from './pages/DisctrictCrime';
+import DistricBranches from './pages/DistricBranches';
 
 function App() {
   const location = useLocation();
@@ -52,6 +57,14 @@ function App() {
     <Route path="reports" element={<Reports />} />
     <Route path="settings" element={<Settings />} />
     <Route path="/district-users" element={<DistrictUsers />} />
+    <Route path="/admin-report" element={<AdminReport />} />
+    <Route path="/profile" element={<Profile />} />
+    <Route path="/district-dashboard" element={<DistrictDashboard />} />
+
+
+    <Route path="/district-crime-reports" element={<DisctrictCrime />} />
+    <Route path="/district-branches" element={<DistricBranches />} />
+
 
   </Route>
 </Routes>

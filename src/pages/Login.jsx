@@ -10,32 +10,43 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const res = await axios.post('http://localhost:5000/api/users/login', {
-        email,
-        password,
-      });
-  
-      const user = res.data.user;
-  
-      if (user.status === 'inactive') {
-        setError('Your account is not active yet. Please wait for admin approval.');
-        setLoading(false);
-        return;
-      }
-  
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-    } finally {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+
+  try {
+    const res = await axios.post('http://localhost:5000/api/users/login', {
+      email,
+      password,
+    });
+
+    const user = res.data.user;
+
+    if (user.status === 'inactive') {
+      setError('Your account is not active yet. Please wait for admin approval.');
       setLoading(false);
+      return;
     }
-  };
+
+    localStorage.setItem('token', res.data.token);
+    localStorage.setItem('user', JSON.stringify(user));
+
+    // Redirect based on role
+    if (user.role === 'admin') {
+      navigate('/');
+    } else if (user.role === 'police') {
+      navigate('/district-dashboard');
+    } else {
+      navigate('/branch-dashboard');
+    }
+
+  } catch (err) {
+    setError(err.response?.data?.message || 'Login failed');
+  } finally {
+    setLoading(false);
+  }
+};
+
   
 
   return (

@@ -5,7 +5,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { MdEdit, MdDelete, MdAddCircle } from 'react-icons/md';
 
-const DistrictUsers = () => {
+const DistricBranches = () => {
   const [usersByDistrict, setUsersByDistrict] = useState({});
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -13,7 +13,7 @@ const DistrictUsers = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [form, setForm] = useState({
     name: '', email: '', phone: '', district: '', password: '', confirmPassword: '',
-    role: 'police', status: 'active'
+    role: 'branch', status: 'active'
   });
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
@@ -27,28 +27,38 @@ const DistrictUsers = () => {
 
   useEffect(() => { fetchUsers(); }, []);
 
-  const fetchUsers = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      const res = await axios.get('http://localhost:5000/api/users/district-users', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUsersByDistrict(res.data);
-      setAllUsers(Object.values(res.data).flat());
-    } catch (err) {
-      console.error('Error fetching users:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const fetchUsers = async () => {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const district = user?.district;
+
+  if (!district) {
+    console.error('No district found for user.');
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const res = await axios.get(`http://localhost:5000/api/users/branches/${district}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setUsersByDistrict({ [district]: res.data });
+    setAllUsers(res.data);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const openModal = (user = null) => {
     setEditingUser(user);
     setForm(user ? {
       name: user.name, email: user.email, phone: user.phone, district: user.district,
-      password: '', confirmPassword: '', role: user.role || 'police', status: user.status || 'inactive'
+      password: '', confirmPassword: '', role: 'branch', status: user.status || 'inactive'
     } : {
-      name: '', email: '', phone: '', district: '', password: '', confirmPassword: '', role: 'police', status: 'inactive'
+      name: '', email: '', phone: '', district: '', password: '', confirmPassword: '', role: 'branch', status: 'inactive'
     });
     setErrors({});
     setImage(null);
@@ -163,8 +173,7 @@ const DistrictUsers = () => {
               <div><label className="text-sm font-medium">Phone</label><input name="phone" value={form.phone} onChange={handleChange} className="w-full border px-3 py-2 rounded" />{errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}</div>
               <div><label className="text-sm font-medium">District</label><select name="district" value={form.district} onChange={handleChange} className="w-full border px-3 py-2 rounded">
                 <option value="">Select</option>{districts.map(d => <option key={d}>{d}</option>)}</select>{errors.district && <p className="text-red-500 text-sm">{errors.district}</p>}</div>
-              <div><label className="text-sm font-medium">Role</label><select name="role" value={form.role} onChange={handleChange} className="w-full border px-3 py-2 rounded">
-                <option value="police">Police</option><option value="branch">Branch</option></select></div>
+              
               <div><label className="text-sm font-medium">Status</label><select name="status" value={form.status} onChange={handleChange} className="w-full border px-3 py-2 rounded">
                 <option value="active">Active</option><option value="inactive">Inactive</option></select></div>
               {!editingUser && <>
@@ -201,4 +210,4 @@ const DistrictUsers = () => {
   );
 };
 
-export default DistrictUsers;
+export default DistricBranches;
