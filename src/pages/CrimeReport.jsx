@@ -19,7 +19,7 @@ const CrimeReport = () => {
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/reports');
+      const res = await axios.get('https://security991.onrender.com/api/reports');
       setReports(res.data);
     } catch (err) {
       console.error('Failed to load reports:', err);
@@ -35,7 +35,7 @@ const CrimeReport = () => {
   const handleStatusChange = async (id, newStatus) => {
     setUpdatingId(id);
     try {
-      const res = await axios.patch(`http://localhost:5000/api/reports/status/${id}`, { status: newStatus });
+      const res = await axios.patch(`https://security991.onrender.com/api/reports/status/${id}`, { status: newStatus });
       setMessage({ type: 'success', text: res.data.message });
       fetchReports();
     } catch (err) {
@@ -88,7 +88,7 @@ const CrimeReport = () => {
                       {report.images?.map((img, i) => (
                         <img
                           key={i}
-                          src={`http://localhost:5000/uploads/report/${img}`}
+                          src={`https://security991.onrender.com/uploads/report/${img}`}
                           alt="crime"
                           className="w-12 h-12 object-cover rounded border"
                         />
