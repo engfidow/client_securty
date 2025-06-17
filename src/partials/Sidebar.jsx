@@ -7,6 +7,7 @@ import {
   MdReport,
   MdAccountCircle,
   MdLogout,
+  MdFeedback
 } from 'react-icons/md';
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
@@ -96,6 +97,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           {role === 'admin' && navItem('/citizens', <MdMap size={20} />, 'citizens')}
 
 
+          {role === 'admin' && navItem('/feedbacks', <MdFeedback size={20} />, 'Feedbacks')}
           {role === 'admin' && navItem('/admin-report', <MdReport size={20} />, 'Reports')}
 
         

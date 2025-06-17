@@ -26,7 +26,7 @@ const AdminReport = () => {
         params.from = from;
         params.to = to;
       }
-      const res = await axios.get('https://security991.onrender.com/api/reports/solved-summary', { params });
+      const res = await axios.get('http://localhost:5000/api/reports/solved-summary', { params });
       setGrouped(res.data.grouped);
       setList(res.data.list);
     } catch (err) {
@@ -125,7 +125,7 @@ const AdminReport = () => {
     report.images.map((img, idx) => (
       <img
         key={idx}
-        src={`https://security991.onrender.com/uploads/report/${img}`}
+        src={`http://localhost:5000/uploads/report/${img}`}
         alt={`crime-${idx}`}
         className="w-12 h-12 object-cover rounded border"
       />

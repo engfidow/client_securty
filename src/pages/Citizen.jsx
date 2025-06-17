@@ -12,7 +12,7 @@ const CitizenList = () => {
   const fetchCitizens = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get('https://security991.onrender.com/api/users/citizens', {
+      const res = await axios.get('http://localhost:5000/api/users/citizens', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCitizens(res.data);
@@ -37,7 +37,7 @@ const CitizenList = () => {
     setMessage(null);
     try {
       const res = await axios.patch(
-        `https://security991.onrender.com/api/users/approve/${userId}`,
+        `http://localhost:5000/api/users/approve/${userId}`,
         { status: statusUpdates[userId] },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -107,7 +107,7 @@ const CitizenList = () => {
                 <tr key={user._id} className="border-t dark:border-gray-700">
                   <td className="p-3">
                     <img
-                      src={user.image ? `https://security991.onrender.com/uploads/${user.image}` : '/default-user.png'}
+                      src={user.image ? `http://localhost:5000/uploads/${user.image}` : '/default-user.png'}
                       alt="user"
                       className="w-10 h-10 rounded-full object-cover border"
                     />

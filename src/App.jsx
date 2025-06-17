@@ -22,6 +22,7 @@ import Profile from './pages/Profile';
 import DistrictDashboard from './pages/DistrictDashboard';
 import DisctrictCrime from './pages/DisctrictCrime';
 import DistricBranches from './pages/DistricBranches';
+import FeedbackList from './pages/FeedbackList';
 
 function App() {
   const location = useLocation();
@@ -58,6 +59,7 @@ function App() {
     <Route path="settings" element={<Settings />} />
     <Route path="/district-users" element={<DistrictUsers />} />
     <Route path="/admin-report" element={<AdminReport />} />
+    <Route path="/feedbacks" element={<FeedbackList />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/district-dashboard" element={<DistrictDashboard />} />
 
