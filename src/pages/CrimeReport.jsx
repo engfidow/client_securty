@@ -11,15 +11,12 @@ const CrimeReport = () => {
   const [updatingId, setUpdatingId] = useState(null);
   const [message, setMessage] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
-  const [mapUrl, setMapUrl] = useState('');
-  const [reportLocation, setReportLocation] = useState('');
   const [selectedReport, setSelectedReport] = useState(null);
-
-
+  const API_URL = 'http://localhost:5000/api/reports'; // <-- your backend endpoint
 
   const fetchReports = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/reports');
+      const res = await axios.get(API_URL);
       setReports(res.data);
     } catch (err) {
       console.error('Failed to load reports:', err);
@@ -35,7 +32,7 @@ const CrimeReport = () => {
   const handleStatusChange = async (id, newStatus) => {
     setUpdatingId(id);
     try {
-      const res = await axios.patch(`http://localhost:5000/api/reports/status/${id}`, { status: newStatus });
+      const res = await axios.patch(`${API_URL}/status/${id}`, { status: newStatus });
       setMessage({ type: 'success', text: res.data.message });
       fetchReports();
     } catch (err) {
@@ -47,11 +44,10 @@ const CrimeReport = () => {
     }
   };
 
-  const handleTrack = (location) => {
-  setReportLocation(location); // "lat,lng"
-  setMapOpen(true);
-};
-
+  const handleTrack = (report) => {
+    setSelectedReport(report);
+    setMapOpen(true);
+  };
 
   return (
     <div className="p-6">
@@ -74,31 +70,25 @@ const CrimeReport = () => {
                 <th className="p-3 text-left">Title</th>
                 <th className="p-3">User</th>
                 <th className="p-3">District</th>
-                <th className="p-3">Branch</th>
+                <th className="p-3">Type</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Track</th>
-                
               </tr>
             </thead>
             <tbody>
               {reports.map((report) => (
-                <tr key={report._id} className="border-t dark:border-gray-700 cursor-pointer"  onClick={() => setSelectedReport(report)}>
-                   <td className="p-3">
+                <tr key={report._id} className="border-t dark:border-gray-700 cursor-pointer" onClick={() => setSelectedReport(report)}>
+                  <td className="p-3">
                     <div className="flex flex-wrap gap-2">
                       {report.images?.map((img, i) => (
-                        <img
-                          key={i}
-                          src={`http://localhost:5000/uploads/report/${img}`}
-                          alt="crime"
-                          className="w-12 h-12 object-cover rounded border"
-                        />
+                        <img key={i} src={`http://localhost:5000/uploads/report/${img}`} alt="crime" className="w-12 h-12 object-cover rounded border" />
                       ))}
                     </div>
                   </td>
                   <td className="p-3 font-medium text-gray-800 dark:text-gray-100">{report.title}</td>
                   <td className="p-3">{report.user?.name}</td>
                   <td className="p-3">{report.district}</td>
-                  <td className="p-3">{report.branch || '-'}</td>
+                  <td className="p-3">{report.type}</td>
                   <td className="p-3">
                     <select
                       onClick={(e) => e.stopPropagation()}
@@ -115,16 +105,12 @@ const CrimeReport = () => {
                   </td>
                   <td className="p-3 text-center">
                     <button
-                      onClick={(e) => {
-    e.stopPropagation();
-    handleTrack(report.location);
-  }}
+                      onClick={(e) => { e.stopPropagation(); handleTrack(report); }}
                       className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
                     >
                       Track
                     </button>
                   </td>
-                 
                 </tr>
               ))}
             </tbody>
@@ -132,19 +118,13 @@ const CrimeReport = () => {
         </div>
       )}
 
-      {/* 📍 Map Modal */}
-     {mapOpen && (
-  <LiveMapModal reportLocation={reportLocation} onClose={() => setMapOpen(false)} />
-)}
+      {mapOpen && selectedReport && (
+        <LiveMapModal report={selectedReport} onClose={() => setMapOpen(false)} />
+      )}
 
-{selectedReport && (
-  <ReportPreviewModal
-    report={selectedReport}
-    onClose={() => setSelectedReport(null)}
-  />
-)}
-
-
+      {/* {selectedReport && (
+        <ReportPreviewModal report={selectedReport} onClose={() => setSelectedReport(null)} />
+      )} */}
     </div>
   );
 };

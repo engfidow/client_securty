@@ -1,67 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import React, { useEffect, useState, useRef } from 'react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import io from 'socket.io-client';
 
-const LiveMapModal = ({ reportLocation, onClose }) => {
-  const [myLocation, setMyLocation] = useState(null);
+const containerStyle = { width: '100%', height: '100%' };
+
+const LiveMapModal = ({ report, onClose }) => {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: 'AIzaSyCi3WjC7uOUTETqWvXtCjgdv0X6O6twIOQ'
+  });
+
+  const initialCoords = report.location.split(',').map(Number);
+  const [liveCoords, setLiveCoords] = useState(
+    report.liveLocation ? report.liveLocation.split(',').map(Number) : initialCoords
+  );
+
+  const mapRef = useRef();
+  const socketRef = useRef();
 
   useEffect(() => {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        setMyLocation([position.coords.latitude, position.coords.longitude]);
-        console.log(myLocation)
-      },
-      (err) => console.error('Geolocation error:', err),
-      { enableHighAccuracy: true, maximumAge: 10000 }
-    );
-  }, []);
+    if (report.type === 'personal') {
+      socketRef.current = io('http://localhost:5000'); // Replace with backend URL
 
-  const reportLatLng = reportLocation?.split(',').map(Number);
-  console.log(reportLatLng)
+      socketRef.current.on('updateLocation', (data) => {
+        if (data.reportId === report._id) {
+          const newCoords = [data.latitude, data.longitude];
+          setLiveCoords(newCoords);
 
-  const userIcon = new L.Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
-    iconSize: [25, 25],
-  });
+          // Smooth pan to new position
+          if (mapRef.current) {
+            mapRef.current.panTo({
+              lat: data.latitude,
+              lng: data.longitude
+            });
+          }
+        }
+      });
 
-  const reportIcon = new L.Icon({
-    iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684912.png',
-    iconSize: [25, 25],
-  });
+      return () => {
+        socketRef.current.disconnect();
+      };
+    }
+  }, [report]);
+
+  if (!isLoaded) return <div>Loading Map...</div>;
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
       <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg w-full max-w-3xl h-[500px] relative">
         <h3 className="text-lg font-bold text-violet-600 dark:text-violet-300 mb-2">Live Tracking Map</h3>
 
-        <MapContainer
-          center={reportLatLng}
-          zoom={14}
-          scrollWheelZoom={true}
-          className="w-full h-full rounded-md"
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={{ lat: liveCoords[0], lng: liveCoords[1] }}
+          zoom={16}
+          onLoad={(map) => (mapRef.current = map)}
         >
-          <TileLayer
-            attribution='&copy; OpenStreetMap'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          <Marker position={{ lat: initialCoords[0], lng: initialCoords[1] }} label="Start" />
+
+          <Marker
+            position={{ lat: liveCoords[0], lng: liveCoords[1] }}
+            label="Live"
+            icon={{
+              url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+              scaledSize: new window.google.maps.Size(50, 50)
+            }}
           />
-
-          {reportLatLng && (
-            <Marker position={reportLatLng} icon={reportIcon}>
-              <Popup>Report Location</Popup>
-            </Marker>
-          )}
-
-          {myLocation && (
-            <Marker position={myLocation} icon={userIcon}>
-              <Popup>Your Live Location</Popup>
-            </Marker>
-          )}
-
-          {myLocation && reportLatLng && (
-            <Polyline positions={[myLocation, reportLatLng]} color="red" />
-          )}
-        </MapContainer>
+        </GoogleMap>
 
         <button
           onClick={onClose}
