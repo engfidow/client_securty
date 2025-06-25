@@ -19,9 +19,10 @@ const LiveMapModal = ({ report, onClose }) => {
 
   useEffect(() => {
     if (report.type === 'personal') {
-      socketRef.current = io('http://localhost:5000'); // Replace with backend URL
+      socketRef.current = io('https://security991.onrender.com'); // Replace with backend URL
 
       socketRef.current.on('updateLocation', (data) => {
+        console.log(data)
         if (data.reportId === report._id) {
           const newCoords = [data.latitude, data.longitude];
           setLiveCoords(newCoords);

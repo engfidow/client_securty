@@ -30,7 +30,7 @@ const DistrictUsers = () => {
   const fetchUsers = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get('http://localhost:5000/api/users/district-users', {
+      const res = await axios.get('https://security991.onrender.com/api/users/district-users', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsersByDistrict(res.data);
@@ -88,8 +88,8 @@ const DistrictUsers = () => {
 
     try {
       const url = editingUser
-        ? `http://localhost:5000/api/users/update/${editingUser._id}`
-        : `http://localhost:5000/api/users/register`;
+        ? `https://security991.onrender.com/api/users/update/${editingUser._id}`
+        : `https://security991.onrender.com/api/users/register`;
       const method = editingUser ? axios.put : axios.post;
       await method(url, formData, { headers: { Authorization: `Bearer ${token}` } });
       fetchUsers();
@@ -104,7 +104,7 @@ const DistrictUsers = () => {
   const handleDelete = async (userId) => {
     const token = localStorage.getItem('token');
     if (window.confirm('Are you sure?')) {
-      await axios.delete(`http://localhost:5000/api/users/delete/${userId}`, {
+      await axios.delete(`https://security991.onrender.com/api/users/delete/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();

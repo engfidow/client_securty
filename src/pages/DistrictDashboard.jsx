@@ -32,7 +32,7 @@ const DistrictDashboard = () => {
     if (!district) return;
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/reports/district-dashboard/${district}`);
+        const res = await axios.get(`https://security991.onrender.com/api/reports/district-dashboard/${district}`);
         setStats(res.data);
       } catch (err) {
         console.error('Error loading dashboard:', err);
