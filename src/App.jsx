@@ -23,6 +23,7 @@ import DistrictDashboard from './pages/DistrictDashboard';
 import DisctrictCrime from './pages/DisctrictCrime';
 import DistricBranches from './pages/DistricBranches';
 import FeedbackList from './pages/FeedbackList';
+import PersonalReport from './pages/PersonalReport';
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,7 @@ function App() {
     }
   >
     <Route index element={<Dashboard />} />
+    <Route path="personal-reports" element={<PersonalReport />} />
     <Route path="crime-reports" element={<CrimeReport />} />
     <Route path="citizens" element={<CitizenList />} />
     <Route path="reports" element={<Reports />} />

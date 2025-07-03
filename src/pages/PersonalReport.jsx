@@ -2,25 +2,27 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
+import LiveMapModal from '../components/LiveMapModal';
 import ReportPreviewModal from '../components/ReportPreviewModal';
-import CrimeLiveModel from '../components/CrimeLiveModel';
 
-const CrimeReport = () => {
+const PersonalReport = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
   const [message, setMessage] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
+  const API_URL = 'https://security991.onrender.com/api/reports'; // <-- your backend endpoint
+
   const [selectedReportForPreview, setSelectedReportForPreview] = useState(null);
   const [selectedReportForMap, setSelectedReportForMap] = useState(null);
-  const API_URL = 'https://security991.onrender.com/api/reports'; // <-- your backend endpoint
+
+
 
  const fetchReports = async () => {
   try {
     const res = await axios.get(API_URL);
-    const personalReports = res.data.filter((report) => report.type === "crime");
+    const personalReports = res.data.filter((report) => report.type === "personal");
     setReports(personalReports);
   } catch (err) {
     console.error('Failed to load reports:', err);
@@ -28,6 +30,7 @@ const CrimeReport = () => {
     setLoading(false);
   }
 };
+
 
   useEffect(() => {
     fetchReports();
@@ -55,7 +58,7 @@ const CrimeReport = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-4">📋 Crime Reports</h2>
+      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-4">📋 Personal Reports</h2>
 
       {message && (
         <div className={`mb-4 px-4 py-2 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -122,26 +125,25 @@ const CrimeReport = () => {
         </div>
       )}
 
-      {/* Map modal */}
       {mapOpen && selectedReportForMap && (
-        <CrimeLiveModel
-          report={selectedReportForMap}
-          onClose={() => {
-            setMapOpen(false);
-            setSelectedReportForMap(null);
-          }}
-        />
-      )}
+  <LiveMapModal
+    report={selectedReportForMap}
+    onClose={() => {
+      setMapOpen(false);
+      setSelectedReportForMap(null);
+    }}
+  />
+)}
 
-      {/* Preview modal */}
-      {selectedReportForPreview && (
-        <ReportPreviewModal
-          report={selectedReportForPreview}
-          onClose={() => setSelectedReportForPreview(null)}
-        />
-      )}
+{selectedReportForPreview && (
+  <ReportPreviewModal
+    report={selectedReportForPreview}
+    onClose={() => setSelectedReportForPreview(null)}
+  />
+)}
+
     </div>
   );
 };
 
-export default CrimeReport;
+export default PersonalReport;

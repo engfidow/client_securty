@@ -11,28 +11,24 @@ const DisctrictCrime = () => {
   const [updatingId, setUpdatingId] = useState(null);
   const [message, setMessage] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
-  const [mapUrl, setMapUrl] = useState('');
-  const [reportLocation, setReportLocation] = useState('');
+  const [trackingReport, setTrackingReport] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
 
-
-
   const fetchReports = async () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  const userId = user?._id;
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?._id;
 
-  if (!userId) return console.error('User not found in localStorage');
+    if (!userId) return console.error('User not found in localStorage');
 
-  try {
-    const res = await axios.get(`https://security991.onrender.com/api/reports/distrct/crime/${userId}`);
-    setReports(res.data);
-  } catch (err) {
-    console.error('Failed to load reports:', err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+    try {
+      const res = await axios.get(`https://security991.onrender.com/api/reports/distrct/crime/${userId}`);
+      setReports(res.data);
+    } catch (err) {
+      console.error('Failed to load reports:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchReports();
@@ -53,11 +49,10 @@ const DisctrictCrime = () => {
     }
   };
 
-  const handleTrack = (location) => {
-  setReportLocation(location); // "lat,lng"
-  setMapOpen(true);
-};
-
+  const handleTrack = (report) => {
+    setTrackingReport(report);
+    setMapOpen(true);
+  };
 
   return (
     <div className="p-6">
@@ -81,15 +76,15 @@ const DisctrictCrime = () => {
                 <th className="p-3">User</th>
                 <th className="p-3">District</th>
                 <th className="p-3">Branch</th>
+                <th className="p-3">Type</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Track</th>
-                
               </tr>
             </thead>
             <tbody>
               {reports.map((report) => (
-                <tr key={report._id} className="border-t dark:border-gray-700 cursor-pointer"  onClick={() => setSelectedReport(report)}>
-                   <td className="p-3">
+                <tr key={report._id} className="border-t dark:border-gray-700 cursor-pointer" onClick={() => setSelectedReport(report)}>
+                  <td className="p-3">
                     <div className="flex flex-wrap gap-2">
                       {report.images?.map((img, i) => (
                         <img
@@ -105,6 +100,7 @@ const DisctrictCrime = () => {
                   <td className="p-3">{report.user?.name}</td>
                   <td className="p-3">{report.district}</td>
                   <td className="p-3">{report.branch || '-'}</td>
+                  <td className="p-3 capitalize">{report.type}</td>
                   <td className="p-3">
                     <select
                       onClick={(e) => e.stopPropagation()}
@@ -122,15 +118,14 @@ const DisctrictCrime = () => {
                   <td className="p-3 text-center">
                     <button
                       onClick={(e) => {
-    e.stopPropagation();
-    handleTrack(report.location);
-  }}
+                        e.stopPropagation();
+                        handleTrack(report);
+                      }}
                       className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
                     >
                       Track
                     </button>
                   </td>
-                 
                 </tr>
               ))}
             </tbody>
@@ -138,19 +133,13 @@ const DisctrictCrime = () => {
         </div>
       )}
 
-      {/* 📍 Map Modal */}
-     {mapOpen && (
-  <LiveMapModal reportLocation={reportLocation} onClose={() => setMapOpen(false)} />
-)}
+      {mapOpen && trackingReport && (
+        <LiveMapModal report={trackingReport} onClose={() => setMapOpen(false)} />
+      )}
 
-{selectedReport && (
-  <ReportPreviewModal
-    report={selectedReport}
-    onClose={() => setSelectedReport(null)}
-  />
-)}
-
-
+      {selectedReport && (
+        <ReportPreviewModal report={selectedReport} onClose={() => setSelectedReport(null)} />
+      )}
     </div>
   );
 };
