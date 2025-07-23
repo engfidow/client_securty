@@ -4,6 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import LiveMapModal from '../components/LiveMapModal';
 import ReportPreviewModal from '../components/ReportPreviewModal';
+import CrimeLiveModel from '../components/CrimeLiveModel';
 
 const DisctrictCrime = () => {
   const [reports, setReports] = useState([]);
@@ -134,7 +135,16 @@ const DisctrictCrime = () => {
       )}
 
       {mapOpen && trackingReport && (
-        <LiveMapModal report={trackingReport} onClose={() => setMapOpen(false)} />
+        // <CrimeLiveModel report={trackingReport} onClose={() => setMapOpen(false)} />
+
+        <CrimeLiveModel
+          report={trackingReport}
+          onClose={() => {
+            setMapOpen(false);
+            setTrackingReport(null);
+          }}
+        />
+       
       )}
 
       {selectedReport && (
