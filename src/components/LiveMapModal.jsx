@@ -1,43 +1,119 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
-import socket from '../utils/socket';
+import mapboxgl from 'mapbox-gl';
+import io from 'socket.io-client';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-const containerStyle = { width: '100%', height: '100%' };
+
+const MAPBOX_TOKEN = 'pk.eyJ1IjoibmFpbWE3NzciLCJhIjoiY21kZzBxdTVzMGdhNzJrcjFuaW8yM2QzdSJ9.oxnbUzrKit3T1bIJ2YSFwg';
+mapboxgl.accessToken = MAPBOX_TOKEN;
+
+const socket = io('https://security991.onrender.com'); // Replace with your socket server
+
+const getStorageKey = (reportId) => `report_chat_${reportId}`;
 
 const LiveMapChatModal = ({ report, onClose }) => {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: 'AIzaSyCi3WjC7uOUTETqWvXtCjgdv0X6O6twIOQ'
-  });
-
-  const mapRef = useRef();
-  const chatEndRef = useRef();
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
+  const chatEndRef = useRef(null);
 
   const startCoords = report.location.split(',').map(Number);
   const [liveCoords, setLiveCoords] = useState(
     report.liveLocation ? report.liveLocation.split(',').map(Number) : startCoords
   );
   const [routePath, setRoutePath] = useState([
-    { lat: startCoords[0], lng: startCoords[1] }
+    [startCoords[1], startCoords[0]]
   ]);
-
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState('');
 
   useEffect(() => {
+    // Load stored chat messages
+    const stored = localStorage.getItem(getStorageKey(report._id));
+    if (stored) setMessages(JSON.parse(stored));
+
+    // Initialize Mapbox map
+    mapRef.current = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [liveCoords[1], liveCoords[0]],
+      zoom: 15
+    });
+
+    const map = mapRef.current;
+
+    // Start marker
+    new mapboxgl.Marker({ color: 'green' })
+      .setLngLat([startCoords[1], startCoords[0]])
+      .setPopup(new mapboxgl.Popup().setText('Start'))
+      .addTo(map);
+
+    // Live marker
+    const liveMarker = new mapboxgl.Marker({ color: 'blue' })
+      .setLngLat([liveCoords[1], liveCoords[0]])
+      .addTo(map);
+
+    // Draw line
+    const drawRoute = (coords) => {
+      if (map.getSource('route')) {
+        map.getSource('route').setData({
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: coords
+          }
+        });
+      } else {
+        map.addSource('route', {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: coords
+            }
+          }
+        });
+
+        map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: 'route',
+          paint: {
+            'line-color': '#1E90FF',
+            'line-width': 4
+          }
+        });
+      }
+    };
+
+    map.on('load', () => {
+      drawRoute(routePath);
+    });
+
+    // Socket
     socket.emit('joinRoom', report._id);
 
     const handleLocation = (data) => {
       if (data.reportId === report._id) {
-        const newCoord = { lat: data.latitude, lng: data.longitude };
+        const newCoord = [data.longitude, data.latitude];
         setLiveCoords([data.latitude, data.longitude]);
-        setRoutePath((prev) => [...prev, newCoord]);
-        if (mapRef.current) mapRef.current.panTo(newCoord);
+        setRoutePath((prev) => {
+          const updated = [...prev, newCoord];
+          drawRoute(updated);
+          return updated;
+        });
+        liveMarker.setLngLat(newCoord);
+        map.flyTo({ center: newCoord, zoom: 15 });
       }
     };
 
     const handleMessage = (data) => {
       if (data.reportId === report._id) {
-        setMessages((prev) => [...prev, data]);
+        setMessages((prev) => {
+          const updated = [...prev, data];
+          localStorage.setItem(getStorageKey(report._id), JSON.stringify(updated));
+          return updated;
+        });
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
     };
@@ -48,25 +124,22 @@ const LiveMapChatModal = ({ report, onClose }) => {
     return () => {
       socket.off('updateLocation', handleLocation);
       socket.off('newMessage', handleMessage);
+      map.remove();
     };
-  }, [report]);
+  }, []);
 
   const handleSend = () => {
-    if (!newMsg.trim()) return;
-
-    const message = {
-      reportId: report._id,
-      sender: 'Officer',
-      text: newMsg.trim(),
-      timestamp: new Date().toISOString()
-    };
-
-    socket.emit('sendMessage', message);
-    setNewMsg('');
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  if (!newMsg.trim()) return;
+  const message = {
+    reportId: report._id,
+    sender: 'Officer',
+    text: newMsg.trim(),
+    timestamp: new Date().toISOString()
   };
+  socket.emit('sendMessage', message);
+  setNewMsg('');
+};
 
-  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center">
@@ -74,30 +147,7 @@ const LiveMapChatModal = ({ report, onClose }) => {
         {/* Left: Map */}
         <div className="w-2/3 h-full p-4">
           <h3 className="text-lg font-bold mb-2 text-blue-700">Live Route Tracking</h3>
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={{ lat: liveCoords[0], lng: liveCoords[1] }}
-            zoom={16}
-            onLoad={(map) => (mapRef.current = map)}
-          >
-            <Marker position={{ lat: startCoords[0], lng: startCoords[1] }} label="Start" />
-            <Marker
-              position={{ lat: liveCoords[0], lng: liveCoords[1] }}
-              label="Live"
-              icon={{
-                url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                scaledSize: new window.google.maps.Size(40, 40)
-              }}
-            />
-            <Polyline
-              path={routePath}
-              options={{
-                strokeColor: '#1E90FF',
-                strokeOpacity: 0.8,
-                strokeWeight: 4
-              }}
-            />
-          </GoogleMap>
+          <div ref={mapContainerRef} className="w-full h-full rounded shadow" />
         </div>
 
         {/* Right: Chat */}

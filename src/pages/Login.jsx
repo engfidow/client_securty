@@ -37,7 +37,7 @@ const Login = () => {
     } else if (user.role === 'police') {
       navigate('/district-dashboard');
     } else {
-      navigate('/branch-dashboard');
+      navigate('/district-dashboard');
     }
 
   } catch (err) {

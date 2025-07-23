@@ -24,6 +24,8 @@ import DisctrictCrime from './pages/DisctrictCrime';
 import DistricBranches from './pages/DistricBranches';
 import FeedbackList from './pages/FeedbackList';
 import PersonalReport from './pages/PersonalReport';
+import HomePage from './pages/HomePage';
+import DistrictPersonalReport from './pages/DistrictPersonalReport';
 
 function App() {
   const location = useLocation();
@@ -42,6 +44,7 @@ function App() {
     
      
     <Routes>
+      <Route path="/home" element={<HomePage />} />
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
 
@@ -54,6 +57,7 @@ function App() {
     }
   >
     <Route index element={<Dashboard />} />
+    <Route path="/district-dashboard" element={<DistrictDashboard />} />
     <Route path="personal-reports" element={<PersonalReport />} />
     <Route path="crime-reports" element={<CrimeReport />} />
     <Route path="citizens" element={<CitizenList />} />
@@ -63,10 +67,11 @@ function App() {
     <Route path="/admin-report" element={<AdminReport />} />
     <Route path="/feedbacks" element={<FeedbackList />} />
     <Route path="/profile" element={<Profile />} />
-    <Route path="/district-dashboard" element={<DistrictDashboard />} />
+    
 
 
     <Route path="/district-crime-reports" element={<DisctrictCrime />} />
+    <Route path="/district-personal-reports" element={<DistrictPersonalReport />} />
     <Route path="/district-branches" element={<DistricBranches />} />
 
 

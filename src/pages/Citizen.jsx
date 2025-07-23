@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const CitizenList = () => {
   const [citizens, setCitizens] = useState([]);
@@ -59,6 +61,21 @@ const CitizenList = () => {
     return user.status === filter;
   });
 
+  const renderSkeletonRows = () =>
+    Array(6)
+      .fill()
+      .map((_, idx) => (
+        <tr key={idx} className="border-t dark:border-gray-700">
+          {Array(7)
+            .fill()
+            .map((__, col) => (
+              <td key={col} className="p-3">
+                <Skeleton height={20} className="dark:bg-gray-700" />
+              </td>
+            ))}
+        </tr>
+      ));
+
   return (
     <div className="p-6 dark:bg-gray-900 min-h-screen">
       <div className="flex items-center justify-between mb-4">
@@ -86,81 +103,85 @@ const CitizenList = () => {
         </div>
       )}
 
-      {loading ? (
-        <p className="text-gray-700 dark:text-gray-300">Loading...</p>
-      ) : (
-        <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded shadow">
-          <table className="min-w-full text-sm text-left border dark:border-gray-700">
-            <thead className="bg-violet-100 text-violet-700 dark:bg-gray-700 dark:text-violet-300">
+      <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded shadow">
+        <table className="min-w-full text-sm text-left border dark:border-gray-700">
+          <thead className="bg-violet-100 text-violet-700 dark:bg-gray-700 dark:text-violet-300">
+            <tr>
+              <th className="p-3">Image</th>
+              <th className="p-3">National ID</th>
+              <th className="p-3">Name</th>
+              <th className="p-3">Email</th>
+              <th className="p-3">Phone</th>
+              <th className="p-3">Status</th>
+              <th className="p-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading
+              ? renderSkeletonRows()
+              : filteredCitizens.map((user) => (
+                  <tr key={user._id} className="border-t dark:border-gray-700">
+                    <td className="p-3">
+                      <img
+                        src={
+                          user.image
+                            ? `https://security991.onrender.com/uploads/${user.image}`
+                            : '/default-user.png'
+                        }
+                        alt="user"
+                        className="w-10 h-10 rounded-full object-cover border"
+                      />
+                    </td>
+                    <td className="p-3 text-gray-800 dark:text-gray-100">
+                      {user.nationalId || '-'}
+                    </td>
+                    <td className="p-3 text-gray-800 dark:text-gray-100">{user.name}</td>
+                    <td className="p-3 text-gray-800 dark:text-gray-100">{user.email}</td>
+                    <td className="p-3 text-gray-800 dark:text-gray-100">{user.phone}</td>
+                    <td className="p-3">
+                      <span
+                        className={`inline-block px-2 py-1 text-xs rounded-full font-medium ${
+                          (statusUpdates[user._id] || user.status) === 'active'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-300 dark:text-green-900'
+                            : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-300 dark:text-yellow-900'
+                        }`}
+                      >
+                        {statusUpdates[user._id] || user.status}
+                      </span>
+                    </td>
+                    <td className="p-3 space-x-2">
+                      <select
+                        value={statusUpdates[user._id] || user.status}
+                        onChange={(e) => handleStatusChange(user._id, e.target.value)}
+                        className="border rounded px-2 py-1 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                      </select>
+                      <button
+                        onClick={() => handleUpdate(user._id)}
+                        disabled={updatingId === user._id}
+                        className={`px-3 py-1 text-white rounded ${
+                          updatingId === user._id
+                            ? 'bg-gray-400 dark:bg-gray-600'
+                            : 'bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600'
+                        }`}
+                      >
+                        {updatingId === user._id ? 'Updating...' : 'Update'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            {!loading && filteredCitizens.length === 0 && (
               <tr>
-                <th className="p-3">Image</th>
-                <th className="p-3">National ID</th>
-                <th className="p-3">Name</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Phone</th>
-                <th className="p-3">Status</th>
-                <th className="p-3">Actions</th>
+                <td colSpan="7" className="text-center text-gray-500 py-4 dark:text-gray-400">
+                  No users found.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredCitizens.map((user) => (
-                <tr key={user._id} className="border-t dark:border-gray-700">
-                  <td className="p-3">
-                    <img
-                      src={user.image ? `https://security991.onrender.com/uploads/${user.image}` : '/default-user.png'}
-                      alt="user"
-                      className="w-10 h-10 rounded-full object-cover border"
-                    />
-                  </td>
-                  <td className="p-3 text-gray-800 dark:text-gray-100">{user.nationalId || '-'}</td>
-                  <td className="p-3 text-gray-800 dark:text-gray-100">{user.name}</td>
-                  <td className="p-3 text-gray-800 dark:text-gray-100">{user.email}</td>
-                  <td className="p-3 text-gray-800 dark:text-gray-100">{user.phone}</td>
-                  <td className="p-3">
-                    <span
-                      className={`inline-block px-2 py-1 text-xs rounded-full font-medium ${
-                        (statusUpdates[user._id] || user.status) === 'active'
-                          ? 'bg-green-100 text-green-700 dark:bg-green-300 dark:text-green-900'
-                          : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-300 dark:text-yellow-900'
-                      }`}
-                    >
-                      {statusUpdates[user._id] || user.status}
-                    </span>
-                  </td>
-                  <td className="p-3 space-x-2">
-                    <select
-                      value={statusUpdates[user._id] || user.status}
-                      onChange={(e) => handleStatusChange(user._id, e.target.value)}
-                      className="border rounded px-2 py-1 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                    >
-                      <option value="active">Active</option>
-                      <option value="inactive">Inactive</option>
-                    </select>
-                    <button
-                      onClick={() => handleUpdate(user._id)}
-                      disabled={updatingId === user._id}
-                      className={`px-3 py-1 text-white rounded ${
-                        updatingId === user._id
-                          ? 'bg-gray-400 dark:bg-gray-600'
-                          : 'bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600'
-                      }`}
-                    >
-                      {updatingId === user._id ? 'Updating...' : 'Update'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredCitizens.length === 0 && (
-                <tr>
-                  <td colSpan="7" className="text-center text-gray-500 py-4 dark:text-gray-400">
-                    No users found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      )}
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
