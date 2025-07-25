@@ -110,8 +110,9 @@ const CrimeReport = () => {
                   <td className="p-3 text-center">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleTrack(report); }}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
-                    >
+                      disabled={report.status === "pending" || report.status === "solved"}
+                      className={`px-3 py-1 ${report.status === "pending" || report.status === "solved"? "bg-blue-300" :"bg-blue-600 hover:bg-blue-700"}  text-white text-xs rounded`}
+                    >                    
                       Track
                     </button>
                   </td>

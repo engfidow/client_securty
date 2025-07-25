@@ -5,7 +5,7 @@ import './charts/ChartjsConfig';
 
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
-import Register from './pages/Register';
+
 
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
@@ -46,7 +46,7 @@ function App() {
     <Routes>
       <Route path="/home" element={<HomePage />} />
   <Route path="/login" element={<Login />} />
-  <Route path="/register" element={<Register />} />
+ 
 
   <Route
     path="/"
