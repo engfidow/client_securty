@@ -26,6 +26,9 @@ import FeedbackList from './pages/FeedbackList';
 import PersonalReport from './pages/PersonalReport';
 import HomePage from './pages/HomePage';
 import DistrictPersonalReport from './pages/DistrictPersonalReport';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
+import UnAuthorized from './pages/UnAuthorized';
+import UnAuthenticatedRoutes from './components/UnAuthenticatedRoutes';
 
 function App() {
   const location = useLocation();
@@ -45,7 +48,7 @@ function App() {
      
     <Routes>
       <Route path="/home" element={<HomePage />} />
-  <Route path="/login" element={<Login />} />
+       <Route path="/login" element={<UnAuthenticatedRoutes children={<Login />} />} />
  
 
   <Route
@@ -56,26 +59,30 @@ function App() {
       </ProtectedRoute>
     }
   >
-    <Route index element={<Dashboard />} />
-    <Route path="/district-dashboard" element={<DistrictDashboard />} />
-    <Route path="personal-reports" element={<PersonalReport />} />
-    <Route path="crime-reports" element={<CrimeReport />} />
-    <Route path="citizens" element={<CitizenList />} />
-    <Route path="reports" element={<Reports />} />
-    <Route path="settings" element={<Settings />} />
-    <Route path="/district-users" element={<DistrictUsers />} />
-    <Route path="/admin-report" element={<AdminReport />} />
-    <Route path="/feedbacks" element={<FeedbackList />} />
+
+    {/* start admin Routes */}
+    <Route index element={<AdminProtectedRoute children={<Dashboard />} />} />
+    <Route path="personal-reports" element={<AdminProtectedRoute children={<PersonalReport />} />} />
+    <Route path="crime-reports" element={<AdminProtectedRoute children={<CrimeReport />} />} />
+    <Route path="citizens" element={<AdminProtectedRoute children={<CitizenList />} />} />
+    <Route path="reports" element={<AdminProtectedRoute children={<Reports />} />} />
+    <Route path="settings" element={<AdminProtectedRoute children={<Settings />} />} />
+    <Route path="/district-users" element={<AdminProtectedRoute children={<DistrictUsers />} />} />
+    <Route path="/admin-report" element={<AdminProtectedRoute children={<AdminReport />} />} />
+    <Route path="/feedbacks" element={<AdminProtectedRoute children={<FeedbackList />} />} />
     <Route path="/profile" element={<Profile />} />
     
+    {/* end admin Routes */}
 
-
+    <Route path="/district-dashboard" element={<DistrictDashboard />}/>
     <Route path="/district-crime-reports" element={<DisctrictCrime />} />
     <Route path="/district-personal-reports" element={<DistrictPersonalReport />} />
     <Route path="/district-branches" element={<DistricBranches />} />
 
 
   </Route>
+
+  <Route path="/unauthorized" element={<UnAuthorized />} />
 </Routes>
     
 

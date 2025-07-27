@@ -15,21 +15,26 @@ const DisctrictCrime = () => {
   const [trackingReport, setTrackingReport] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
 
-  const fetchReports = async () => {
+ const fetchReports = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?._id;
 
     if (!userId) return console.error('User not found in localStorage');
 
     try {
-      const res = await axios.get(`https://security991.onrender.com/api/reports/distrct/crime/${userId}`);
-      setReports(res.data);
+      const res = await axios.get("https://security991.onrender.com/api/reports");
+      const filtered = res.data.filter(
+        (report) =>
+          report.type === 'crime' &&
+          report.district?.toLowerCase() === user?.district?.toLowerCase()
+      );
+      setReports(filtered);
     } catch (err) {
       console.error('Failed to load reports:', err);
     } finally {
       setLoading(false);
-    }
-  };
+    }
+  };
 
   useEffect(() => {
     fetchReports();
@@ -122,7 +127,8 @@ const DisctrictCrime = () => {
                         e.stopPropagation();
                         handleTrack(report);
                       }}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+                      disabled={report.status !== "reviewed"}
+                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700":"bg-blue-300"} text-white text-xs rounded`}
                     >
                       Track
                     </button>
