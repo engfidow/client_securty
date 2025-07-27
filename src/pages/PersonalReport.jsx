@@ -113,7 +113,8 @@ const PersonalReport = () => {
                   <td className="p-3 text-center">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleTrack(report); }}
-                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+                       disabled={report.status !== "reviewed"}
+                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700":"bg-blue-300"} text-white text-xs rounded`}
                     >
                       Track
                     </button>

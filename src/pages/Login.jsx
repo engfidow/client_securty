@@ -93,16 +93,12 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 px-4 rounded-md transition"
+            disabled={loading}
+            className={`w-full ${loading ? "bg-violet-200" : "bg-violet-600 hover:bg-violet-700"}    text-white font-semibold py-2 px-4 rounded-md transition` }
           >
             {loading ? 'Login...' : 'Login'}
           </button>
-          <p className="text-center text-sm text-gray-600 mt-4">
-                    dont have an account?{' '}
-                    <Link to="/register" className="text-violet-600 hover:underline">
-                      Register
-                    </Link>
-                  </p>
+        
         </form>
       </div>
     </div>

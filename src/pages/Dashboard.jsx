@@ -102,7 +102,7 @@ const Dashboard = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {loading ? (
-          <Skeleton count={4} height={100} />
+          <Skeleton count={4} height={200} />
         ) : (
           <>
             <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded shadow">
