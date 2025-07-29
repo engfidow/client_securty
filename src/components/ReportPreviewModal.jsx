@@ -17,6 +17,21 @@ const ReportPreviewModal = ({ report, onClose }) => {
           <p><strong>Status:</strong> <span className="capitalize">{report.status}</span></p>
           <p><strong>Description:</strong> {report.description}</p>
           <p><strong>Date:</strong> {new Date(report.createdAt).toLocaleString()}</p>
+           {/* ✅ Added Updated By and Updated At */}
+          {report.updatedBy && (
+            <p><strong>Updated By:</strong> {report.updatedBy.name} ({report.updatedBy.email})</p>
+          )}
+          {report.updatedAt && (
+            <p><strong>Last Updated:</strong> {new Date(report.updatedAt).toLocaleString()}</p>
+          )}
+
+           {/* ✅ Added Updated By and Updated At */}
+          {report.role && (
+            <p><strong>Role By:</strong> {report.updatedBy.role} ({report.updatedBy.email})</p>
+          )}
+          {report.updatedBy.district && (
+            <p><strong>District:</strong> {report.updatedBy.district}</p>
+          )}
 
           <div className="grid grid-cols-3 gap-2 mt-4">
             {report.images?.map((img, i) => (

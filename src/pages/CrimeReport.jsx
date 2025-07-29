@@ -35,20 +35,25 @@ const CrimeReport = () => {
     fetchReports();
   }, []);
 
-  const handleStatusChange = async (id, newStatus) => {
-    setUpdatingId(id);
-    try {
-      const res = await axios.patch(`${API_URL}/status/${id}`, { status: newStatus });
-      setMessage({ type: 'success', text: res.data.message });
-      fetchReports();
-    } catch (err) {
-      console.error(err);
-      setMessage({ type: 'error', text: 'Failed to update status' });
-    } finally {
-      setUpdatingId(null);
-      setTimeout(() => setMessage(null), 2000);
-    }
-  };
+const handleStatusChange = async (id, newStatus) => {
+  setUpdatingId(id);
+  try {
+    const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
+    const res = await axios.patch(`${API_URL}/status/${id}`, {
+      status: newStatus,
+      updatedBy: user?._id,
+    });
+    setMessage({ type: 'success', text: res.data.message });
+    fetchReports();
+  } catch (err) {
+    console.error(err);
+    setMessage({ type: 'error', text: 'Failed to update status' });
+  } finally {
+    setUpdatingId(null);
+    setTimeout(() => setMessage(null), 2000);
+  }
+};
+
 
   const handleTrack = (report) => {
     setSelectedReportForMap(report);
@@ -96,18 +101,19 @@ const CrimeReport = () => {
                   <td className="p-3">{report.district}</td>
                   <td className="p-3">{report.type}</td>
                   <td className="p-3">
-                    <select
-                      onClick={(e) => e.stopPropagation()}
-                      value={report.status}
-                      disabled={updatingId === report._id}
-                      onChange={(e) => handleStatusChange(report._id, e.target.value)}
-                      className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="reviewed">Reviewed</option>
-                      <option value="solved">Solved</option>
-                      <option value="fake">Fake</option>
-                    </select>
+                   <select
+  onClick={(e) => e.stopPropagation()}
+  value={report.status}
+  disabled={updatingId === report._id}
+  onChange={(e) => handleStatusChange(report._id, e.target.value)}
+  className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
+>
+  {report.status === "pending" && <option value="pending">Pending</option>}
+  <option value="reviewed">Reviewed</option>
+  <option value="solved">Solved</option>
+  <option value="fake">Fake</option>
+</select>
+
                   </td>
                   <td className="p-3 text-center">
                     <button

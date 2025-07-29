@@ -120,7 +120,8 @@ const DistrictPersonalReport = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
-                      <option value="pending">Pending</option>
+              
+                      {report.status === "pending" && <option value="pending">Pending</option>}
                       <option value="reviewed">Reviewed</option>
                       <option value="solved">Solved</option>
                       <option value="fake">Fake</option>
