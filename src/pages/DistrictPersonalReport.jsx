@@ -40,7 +40,12 @@ const DistrictPersonalReport = () => {
   const handleStatusChange = async (id, newStatus) => {
     setUpdatingId(id);
     try {
-      const res = await axios.patch(`${API_URL}/status/${id}`, { status: newStatus });
+      const user = JSON.parse(localStorage.getItem('user'));
+      const res = await axios.patch(`${API_URL}/status/${id}`,
+        {
+          status: newStatus,
+          updatedBy: user?._id,
+        });
       setMessage({ type: 'success', text: res.data.message });
       fetchReports();
     } catch (err) {
@@ -65,9 +70,8 @@ const DistrictPersonalReport = () => {
 
       {message && (
         <div
-          className={`mb-4 px-4 py-2 rounded ${
-            message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-          }`}
+          className={`mb-4 px-4 py-2 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`}
         >
           {message.text}
         </div>
@@ -118,14 +122,38 @@ const DistrictPersonalReport = () => {
                       value={report.status}
                       disabled={updatingId === report._id}
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
-                      className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
+                      className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white w-36"
                     >
-              
-                      {report.status === "pending" && <option value="pending">Pending</option>}
-                      <option value="reviewed">Reviewed</option>
-                      <option value="solved">Solved</option>
-                      <option value="fake">Fake</option>
+                      <option
+                        value="pending"
+                        disabled={report.status !== "pending"}
+                        className={`text-sm ${report.status !== "pending" ? "text-gray-400" : ""}`}
+                      >
+                        Pending
+                      </option>
+                      <option
+                        value="reviewed"
+                        disabled={report.status === "pending" || report.status === "solved" || report.status === "fake"}
+                        className={`text-sm ${report.status === "pending" || report.status === "solved" || report.status === "fake" ? "text-gray-400" : ""}`}
+                      >
+                        Reviewed
+                      </option>
+                      <option
+                        value="solved"
+                        disabled={report.status !== "solved" && report.status !== "reviewed"}
+                        className={`text-sm ${report.status !== "solved" && report.status !== "reviewed" ? "text-gray-400" : ""}`}
+                      >
+                        Solved
+                      </option>
+                      <option
+                        value="fake"
+                        disabled={report.status !== "fake" && report.status !== "reviewed"}
+                        className={`text-sm ${report.status !== "fake" && report.status !== "reviewed" ? "text-gray-400" : ""}`}
+                      >
+                        Fake
+                      </option>
                     </select>
+                    
                   </td>
                   <td className="p-3 text-center">
                     <button
@@ -133,8 +161,8 @@ const DistrictPersonalReport = () => {
                         e.stopPropagation();
                         handleTrack(report);
                       }}
-                       disabled={report.status !== "reviewed"}
-                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700":"bg-blue-300"} text-white text-xs rounded`}
+                      disabled={report.status !== "reviewed"}
+                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300"} text-white text-xs rounded`}
                     >
                       Track
                     </button>

@@ -29,8 +29,8 @@ const ReportPreviewModal = ({ report, onClose }) => {
           {report.role && (
             <p><strong>Role By:</strong> {report.updatedBy.role} ({report.updatedBy.email})</p>
           )}
-          {report.updatedBy.district && (
-            <p><strong>District:</strong> {report.updatedBy.district}</p>
+          {report?.updatedBy?.district && (
+            <p><strong>District:</strong> {report?.updatedBy?.district}</p>
           )}
 
           <div className="grid grid-cols-3 gap-2 mt-4">
