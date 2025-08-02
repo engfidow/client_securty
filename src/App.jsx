@@ -32,6 +32,8 @@ import UnAuthenticatedRoutes from './components/UnAuthenticatedRoutes';
 import BranchDashboard from './pages/BranchDashboard';
 import BranchCrime from './pages/BranchCrime';
 import BranchPersonalReport from './pages/BranchPersonalReport';
+import DistrictProtectedRoute from './components/DistrictProtectedRoute';
+import BrancheProtectedRoute from './components/BranchProtectedRoute';
 
 function App() {
   const location = useLocation();
@@ -77,13 +79,16 @@ function App() {
     
     {/* end admin Routes */}
 
-    <Route path="/district-dashboard" element={<DistrictDashboard />}/>
-    <Route path="/branch-dashboard" element={<BranchDashboard />}/>
-    <Route path="/district-crime-reports" element={<DisctrictCrime />} />
-    <Route path="/branch-crime-reports" element={<BranchCrime />} />
-    <Route path="/district-personal-reports" element={<DistrictPersonalReport />} />
-    <Route path="/branch-personal-reports" element={<BranchPersonalReport />} />
-    <Route path="/district-branches" element={<DistricBranches />} />
+    {/* ditrit routes */}
+    <Route path="/district-dashboard" element={<DistrictProtectedRoute><DistrictDashboard /></DistrictProtectedRoute>}/>
+   <Route path="/district-personal-reports" element={<DistrictProtectedRoute><DistrictPersonalReport /></DistrictProtectedRoute>} />
+    <Route path="/district-crime-reports" element={<DistrictProtectedRoute><DisctrictCrime /></DistrictProtectedRoute>} />
+   <Route path="/district-branches" element={<DistrictProtectedRoute><DistricBranches /></DistrictProtectedRoute>} />
+    {/*end  ditrit routes */}
+     <Route path="/branch-dashboard" element={<BrancheProtectedRoute><BranchDashboard /></BrancheProtectedRoute>}/>
+    <Route path="/branch-personal-reports" element={<BrancheProtectedRoute><BranchPersonalReport /></BrancheProtectedRoute>} />
+     <Route path="/branch-crime-reports" element={<BrancheProtectedRoute><BranchCrime /></BrancheProtectedRoute>} />
+    
 
 
   </Route>
