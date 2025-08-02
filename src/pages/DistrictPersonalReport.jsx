@@ -40,7 +40,11 @@ const DistrictPersonalReport = () => {
   const handleStatusChange = async (id, newStatus) => {
     setUpdatingId(id);
     try {
-      const res = await axios.patch(`${API_URL}/status/${id}`, { status: newStatus });
+      const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
+      const res = await axios.patch(`${API_URL}/status/${id}`, {
+        status: newStatus,
+        updatedBy: user?._id,
+      });
       setMessage({ type: 'success', text: res.data.message });
       fetchReports();
     } catch (err) {

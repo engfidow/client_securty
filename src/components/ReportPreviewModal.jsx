@@ -1,6 +1,7 @@
 import React from 'react';
 
 const ReportPreviewModal = ({ report, onClose }) => {
+  console.log(report)
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       <div className="bg-white dark:bg-gray-900 p-6 rounded-lg max-w-2xl w-full shadow-xl overflow-y-auto max-h-[90vh]">
@@ -18,7 +19,7 @@ const ReportPreviewModal = ({ report, onClose }) => {
           <p><strong>Description:</strong> {report.description}</p>
           <p><strong>Date:</strong> {new Date(report.createdAt).toLocaleString()}</p>
            {/* ✅ Added Updated By and Updated At */}
-          {report.updatedBy && (
+          {report?.updatedBy && (
             <p><strong>Updated By:</strong> {report.updatedBy.name} ({report.updatedBy.email})</p>
           )}
           {report.updatedAt && (
@@ -26,13 +27,19 @@ const ReportPreviewModal = ({ report, onClose }) => {
           )}
 
            {/* ✅ Added Updated By and Updated At */}
-          {report.role && (
-            <p><strong>Role By:</strong> {report.updatedBy.role} ({report.updatedBy.email})</p>
+           
+          {report?.updatedBy?.role && (
+            <p><strong>Role By:</strong> {report?.updatedBy.role} ({report?.updatedBy.email})</p>
           )}
-          {report.updatedBy.district && (
-            <p><strong>District:</strong> {report.updatedBy.district}</p>
+          {report?.updatedBy?.district && (
+            <p><strong>District:</strong> {report?.updatedBy.district}</p>
           )}
 
+         
+           {report.updatedStatus && (
+            <p><strong>Updated Status:</strong> {report?.updatedStatus}</p>
+          )}
+          
           <div className="grid grid-cols-3 gap-2 mt-4">
             {report.images?.map((img, i) => (
               <img

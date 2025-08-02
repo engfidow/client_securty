@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
-import { Pie, Bar } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   ArcElement,
-  BarElement,
-  CategoryScale,
-  LinearScale,
   Tooltip,
   Legend,
 } from 'chart.js';
@@ -16,23 +13,21 @@ import {
   FaFileAlt,
   FaCheckCircle,
   FaClock,
-  FaFire,
-  FaLeaf,
 } from 'react-icons/fa';
 
-ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DistrictDashboard = () => {
+const BranchDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const district = JSON.parse(localStorage.getItem('user'))?.district;
+  const branch = JSON.parse(localStorage.getItem('user'))?.name;
 
   useEffect(() => {
-    if (!district) return;
+    if (!branch) return;
     const fetchData = async () => {
       try {
-        const res = await axios.get(`https://security991.onrender.com/api/reports/district-dashboard/${district}`);
+        const res = await axios.get(`https://security991.onrender.com/api/reports/branch-dashboard/${branch}`);
         setStats(res.data);
       } catch (err) {
         console.error('Error loading dashboard:', err);
@@ -41,7 +36,7 @@ const DistrictDashboard = () => {
       }
     };
     fetchData();
-  }, [district]);
+  }, [branch]);
 
   const pieData = {
     labels: ['Solved', 'Pending', 'Reviewed', 'Fake'],
@@ -59,48 +54,16 @@ const DistrictDashboard = () => {
     ],
   };
 
-  const barOptions = {
-    responsive: true,
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { beginAtZero: true, ticks: { stepSize: 1, color: '#6B7280' } },
-      x: { ticks: { color: '#6B7280' } },
-    },
-  };
-
-  const dangerData = {
-    labels: stats?.mostDangerous?.map((b) => b._id || 'Unknown'),
-    datasets: [
-      {
-        label: 'Reports',
-        data: stats?.mostDangerous?.map((b) => b.count),
-        backgroundColor: 'rgba(239, 68, 68, 0.8)',
-      },
-    ],
-  };
-
-  const peaceData = {
-    labels: stats?.mostPeaceful?.map((b) => b._id || 'Unknown'),
-    datasets: [
-      {
-        label: 'Reports',
-        data: stats?.mostPeaceful?.map((b) => b.count),
-        backgroundColor: 'rgba(34, 197, 94, 0.8)',
-      },
-    ],
-  };
-
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-6">📊 District Dashboard</h2>
+      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-6">🏢 Branch Dashboard</h2>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {loading ? (
-          <div className=" dark:bg-gray-800 p-4 rounded shadow mb-6 w-full">
-            <Skeleton count={4} width={1140}  height={100} className='w-full'/>
-            </div>
-          
+          <div className="dark:bg-gray-800 p-4 rounded shadow mb-6 w-full">
+            <Skeleton count={4} width={1140} height={100} className="w-full" />
+          </div>
         ) : (
           <>
             <div className="flex items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded shadow">
@@ -141,18 +104,6 @@ const DistrictDashboard = () => {
         {loading ? <Skeleton height={200} /> : <div className="w-[300px] h-[300px] mx-auto"><Pie data={pieData} /></div>}
       </div>
 
-      {/* Bar Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <h3 className="text-md font-bold text-red-600 dark:text-red-400 mb-2"><FaFire className="inline mr-2" /> Most Dangerous Branches</h3>
-          {loading ? <Skeleton height={200} /> : <Bar data={dangerData} options={barOptions} />}
-        </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <h3 className="text-md font-bold text-green-600 dark:text-green-400 mb-2"><FaLeaf className="inline mr-2" /> Most Peaceful Branches</h3>
-          {loading ? <Skeleton height={200} /> : <Bar data={peaceData} options={barOptions} />}
-        </div>
-      </div>
-
       {/* Latest Reports */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
         <h3 className="text-lg font-semibold text-violet-600 mb-3">🆕 Latest Reports</h3>
@@ -163,7 +114,7 @@ const DistrictDashboard = () => {
             <thead className="bg-violet-100 dark:bg-violet-900 text-violet-800 dark:text-violet-100">
               <tr>
                 <th className="p-2 text-left">Title</th>
-                <th className="p-2 text-left">Branch</th>
+                <th className="p-2 text-left">District</th>
                 <th className="p-2 text-left">Status</th>
                 <th className="p-2 text-left">User</th>
               </tr>
@@ -172,7 +123,7 @@ const DistrictDashboard = () => {
               {stats?.latest?.map((r) => (
                 <tr key={r._id} className="border-t dark:border-gray-700">
                   <td className="p-2">{r.title}</td>
-                  <td className="p-2">{r.branch || '-'}</td>
+                  <td className="p-2">{r.district || '-'}</td>
                   <td className="p-2 capitalize">
                     <span className={`text-xs font-semibold px-2 py-1 rounded text-white ${
                       r.status === 'solved' ? 'bg-green-600' :
@@ -193,4 +144,4 @@ const DistrictDashboard = () => {
   );
 };
 
-export default DistrictDashboard;
+export default BranchDashboard;

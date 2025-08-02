@@ -29,6 +29,9 @@ import DistrictPersonalReport from './pages/DistrictPersonalReport';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import UnAuthorized from './pages/UnAuthorized';
 import UnAuthenticatedRoutes from './components/UnAuthenticatedRoutes';
+import BranchDashboard from './pages/BranchDashboard';
+import BranchCrime from './pages/BranchCrime';
+import BranchPersonalReport from './pages/BranchPersonalReport';
 
 function App() {
   const location = useLocation();
@@ -75,8 +78,11 @@ function App() {
     {/* end admin Routes */}
 
     <Route path="/district-dashboard" element={<DistrictDashboard />}/>
+    <Route path="/branch-dashboard" element={<BranchDashboard />}/>
     <Route path="/district-crime-reports" element={<DisctrictCrime />} />
+    <Route path="/branch-crime-reports" element={<BranchCrime />} />
     <Route path="/district-personal-reports" element={<DistrictPersonalReport />} />
+    <Route path="/branch-personal-reports" element={<BranchPersonalReport />} />
     <Route path="/district-branches" element={<DistricBranches />} />
 
 

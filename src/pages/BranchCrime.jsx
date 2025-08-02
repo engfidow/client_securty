@@ -6,7 +6,7 @@ import LiveMapModal from '../components/LiveMapModal';
 import ReportPreviewModal from '../components/ReportPreviewModal';
 import CrimeLiveModel from '../components/CrimeLiveModel';
 
-const DisctrictCrime = () => {
+const BranchCrime = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
@@ -15,26 +15,26 @@ const DisctrictCrime = () => {
   const [trackingReport, setTrackingReport] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
 
- const fetchReports = async () => {
+  const fetchReports = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user?._id;
+    const userBranch = user?.name;
 
-    if (!userId) return console.error('User not found in localStorage');
+    if (!userBranch) return console.error('Branch user not found in localStorage');
 
     try {
       const res = await axios.get("https://security991.onrender.com/api/reports");
       const filtered = res.data.filter(
         (report) =>
           report.type === 'crime' &&
-          report.district?.toLowerCase() === user?.district?.toLowerCase()
+          report.branch?.toLowerCase() === userBranch.toLowerCase()
       );
       setReports(filtered);
     } catch (err) {
       console.error('Failed to load reports:', err);
     } finally {
       setLoading(false);
-    }
-  };
+    }
+  };
 
   useEffect(() => {
     fetchReports();
@@ -66,7 +66,7 @@ const DisctrictCrime = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-4">📋 Crime Reports</h2>
+      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-4">📋 Branch Crime Reports</h2>
 
       {message && (
         <div className={`mb-4 px-4 py-2 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -119,7 +119,6 @@ const DisctrictCrime = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
-                      
                       {report.status === "pending" && <option value="pending">Pending</option>}
                       <option value="reviewed">Reviewed</option>
                       <option value="solved">Solved</option>
@@ -146,8 +145,6 @@ const DisctrictCrime = () => {
       )}
 
       {mapOpen && trackingReport && (
-        // <CrimeLiveModel report={trackingReport} onClose={() => setMapOpen(false)} />
-
         <CrimeLiveModel
           report={trackingReport}
           onClose={() => {
@@ -155,7 +152,6 @@ const DisctrictCrime = () => {
             setTrackingReport(null);
           }}
         />
-       
       )}
 
       {selectedReport && (
@@ -165,4 +161,4 @@ const DisctrictCrime = () => {
   );
 };
 
-export default DisctrictCrime;
+export default BranchCrime;

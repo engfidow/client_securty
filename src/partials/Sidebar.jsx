@@ -104,7 +104,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Navigation */}
        <nav className="space-y-2">
   {role === 'admin' && navItem('/', <MdDashboard size={20} />, 'Dashboard')}
-  {(role === 'police' || role === 'branch') && navItem('/district-dashboard', <MdDashboard size={20} />, 'Dashboard')}
+  {role === 'police'  && navItem('/district-dashboard', <MdDashboard size={20} />, 'Dashboard')}
+  { role === 'branch' && navItem('/branch-dashboard', <MdDashboard size={20} />, 'Dashboard')}
 
   {role === 'admin' && navItem('/personal-reports', <MdTraffic size={20} />, 'Personal Reports')}
   {role === 'admin' && navItem('/crime-reports',  <TbMessageReportFilled size={20} />, 'Crime Reports')}
@@ -113,9 +114,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   {role === 'admin' && navItem('/feedbacks', <MdFeedback size={20} />, 'Feedbacks')}
   {role === 'admin' && navItem('/admin-report', <MdReport size={20} />, 'Reports')}
 
-  {(role === 'police' || role === 'branch') && navItem('/district-crime-reports', <MdPeople size={20} />, 'Crime Reports')}
-  {(role === 'police' || role === 'branch') && navItem('/district-personal-reports', <MdTraffic size={20} />, 'Personal Reports')}
-  {(role === 'police' || role === 'branch') && navItem('/district-branches', <MdPeople size={20} />, 'District Branches')}
+  {role === 'police'  && navItem('/district-crime-reports', <MdPeople size={20} />, 'Crime Reports')}
+  {role === 'branch' && navItem('/branch-crime-reports', <MdPeople size={20} />, 'Crime Reports')}
+  {role === 'police'  && navItem('/district-personal-reports', <MdTraffic size={20} />, 'Personal Reports')}
+  {role === 'branch' && navItem('/branch-personal-reports', <MdTraffic size={20} />, 'Personal Reports')}
+  {role === 'police'  && navItem('/district-branches', <MdPeople size={20} />, 'District Branches')}
 
   {navItem('/profile', <MdAccountCircle size={20} />, 'Profile')}
 
