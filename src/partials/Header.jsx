@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import UserMenu from '../components/DropdownProfile';
 import ThemeToggle from '../components/ThemeToggle';
 import { BellIcon } from '@heroicons/react/24/outline';
@@ -11,6 +11,25 @@ function Header({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  };
+
+  if (dropdownOpen) {
+    document.addEventListener('mousedown', handleClickOutside);
+  } else {
+    document.removeEventListener('mousedown', handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [dropdownOpen]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -125,7 +144,7 @@ function Header({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 z-50 w-80 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700">
+                <div   ref={dropdownRef} className="absolute right-0 z-50 w-80 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700">
                   <div className="p-2 max-h-96 overflow-y-auto">
                     {notifications.length === 0 ? (
                       <div className="text-gray-500 dark:text-gray-300 text-sm text-center py-4">
