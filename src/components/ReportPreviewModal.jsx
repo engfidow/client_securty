@@ -1,6 +1,8 @@
 import React from 'react';
+import DropdownNotifications from './DropdownNotifications';
 
 const ReportPreviewModal = ({ report, onClose }) => {
+  console.log(report)
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       <div className="bg-white dark:bg-gray-900 p-6 rounded-lg max-w-2xl w-full shadow-xl overflow-y-auto max-h-[90vh]">
@@ -13,26 +15,26 @@ const ReportPreviewModal = ({ report, onClose }) => {
           <p><strong>Title:</strong> {report.title}</p>
           <p><strong>User:</strong> {report.user?.name || '-'}</p>
           <p><strong>District:</strong> {report.district}</p>
-          <p><strong>Branch:</strong> {report.branch || '-'}</p>
           <p><strong>Status:</strong> <span className="capitalize">{report.status}</span></p>
           <p><strong>Description:</strong> {report.description}</p>
           <p><strong>Date:</strong> {new Date(report.createdAt).toLocaleString()}</p>
+         
+           {report.branch && (<p><strong>Branch:</strong> {report.branch }</p>)}
            {/* ✅ Added Updated By and Updated At */}
-          {report.updatedBy && (
+           
+          {report?.updatedBy?.role && (
+            <p><strong>Role By:</strong> {report?.updatedBy.role} ({report?.updatedBy.email})</p>
+          )}
+         
+         
+          {/* ✅ Added Updated By and Updated At */}
+          {report?.updatedBy && (
             <p><strong>Updated By:</strong> {report.updatedBy.name} ({report.updatedBy.email})</p>
           )}
           {report.updatedAt && (
             <p><strong>Last Updated:</strong> {new Date(report.updatedAt).toLocaleString()}</p>
           )}
-
-           {/* ✅ Added Updated By and Updated At */}
-          {report.role && (
-            <p><strong>Role By:</strong> {report.updatedBy.role} ({report.updatedBy.email})</p>
-          )}
-          {report?.updatedBy?.district && (
-            <p><strong>District:</strong> {report?.updatedBy?.district}</p>
-          )}
-
+          
           <div className="grid grid-cols-3 gap-2 mt-4">
             {report.images?.map((img, i) => (
               <img
@@ -45,6 +47,7 @@ const ReportPreviewModal = ({ report, onClose }) => {
           </div>
         </div>
       </div>
+     
     </div>
   );
 };

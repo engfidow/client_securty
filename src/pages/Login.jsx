@@ -33,11 +33,11 @@ const Login = () => {
 
     // Redirect based on role
     if (user.role === 'admin') {
-      navigate('/');
+      navigate('/dashboard');
     } else if (user.role === 'police') {
       navigate('/district-dashboard');
     } else {
-      navigate('/district-dashboard');
+      navigate('/branch-dashboard');
     }
 
   } catch (err) {

@@ -2,28 +2,33 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
+import LiveMapModal from '../components/LiveMapModal';
 import ReportPreviewModal from '../components/ReportPreviewModal';
 import CrimeLiveModel from '../components/CrimeLiveModel';
 
-const CrimeReport = () => {
+const BranchCrime = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
   const [message, setMessage] = useState(null);
   const [mapOpen, setMapOpen] = useState(false);
+  const [trackingReport, setTrackingReport] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
-  const [selectedReportForPreview, setSelectedReportForPreview] = useState(null);
-  const [selectedReportForMap, setSelectedReportForMap] = useState(null);
-  const API_URL = 'https://security991.onrender.com/api/reports'; // <-- your backend endpoint
-
-
 
   const fetchReports = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userBranch = user?.name;
+
+    if (!userBranch) return console.error('Branch user not found in localStorage');
+
     try {
-      const res = await axios.get(API_URL);
-      const personalReports = res.data.filter((report) => report.type === "crime");
-      setReports(personalReports);
+      const res = await axios.get("https://security991.onrender.com/api/reports");
+      const filtered = res.data.filter(
+        (report) =>
+          report.type === 'crime' &&
+          report.branch?.toLowerCase() === userBranch.toLowerCase()
+      );
+      setReports(filtered);
     } catch (err) {
       console.error('Failed to load reports:', err);
     } finally {
@@ -39,7 +44,7 @@ const CrimeReport = () => {
     setUpdatingId(id);
     try {
       const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
-      const res = await axios.patch(`${API_URL}/status/${id}`, {
+      const res = await axios.patch(`https://security991.onrender.com/api/reports/status/${id}`, {
         status: newStatus,
         updatedBy: user?._id,
       });
@@ -54,15 +59,14 @@ const CrimeReport = () => {
     }
   };
 
-
   const handleTrack = (report) => {
-    setSelectedReportForMap(report);
+    setTrackingReport(report);
     setMapOpen(true);
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-4">📋 Crime Reports</h2>
+      <h2 className="text-2xl font-bold text-violet-600 dark:text-violet-400 mb-4">📋 Branch Crime Reports</h2>
 
       {message && (
         <div className={`mb-4 px-4 py-2 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -81,6 +85,7 @@ const CrimeReport = () => {
                 <th className="p-3 text-left">Title</th>
                 <th className="p-3">User</th>
                 <th className="p-3">District</th>
+                <th className="p-3">Branch</th>
                 <th className="p-3">Type</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Track</th>
@@ -88,18 +93,24 @@ const CrimeReport = () => {
             </thead>
             <tbody>
               {reports.map((report) => (
-                <tr key={report._id} className="border-t dark:border-gray-700 cursor-pointer" onClick={() => setSelectedReportForPreview(report)}>
+                <tr key={report._id} className="border-t dark:border-gray-700 cursor-pointer" onClick={() => setSelectedReport(report)}>
                   <td className="p-3">
                     <div className="flex flex-wrap gap-2">
                       {report.images?.map((img, i) => (
-                        <img key={i} src={`https://security991.onrender.com/uploads/report/${img}`} alt="crime" className="w-12 h-12 object-cover rounded border" />
+                        <img
+                          key={i}
+                          src={`https://security991.onrender.com/uploads/report/${img}`}
+                          alt="crime"
+                          className="w-12 h-12 object-cover rounded border"
+                        />
                       ))}
                     </div>
                   </td>
                   <td className="p-3 font-medium text-gray-800 dark:text-gray-100">{report.title}</td>
                   <td className="p-3">{report.user?.name}</td>
                   <td className="p-3">{report.district}</td>
-                  <td className="p-3">{report.type}</td>
+                  <td className="p-3">{report.branch || '-'}</td>
+                  <td className="p-3 capitalize">{report.type}</td>
                   <td className="p-3">
                     <select
                       onClick={(e) => e.stopPropagation()}
@@ -138,12 +149,13 @@ const CrimeReport = () => {
                       )}
                     </select>
 
-
-
                   </td>
                   <td className="p-3 text-center">
                     <button
-                      onClick={(e) => { e.stopPropagation(); handleTrack(report); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleTrack(report);
+                      }}
                       disabled={report.status !== "reviewed"}
                       className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300"} text-white text-xs rounded`}
                     >
@@ -157,26 +169,21 @@ const CrimeReport = () => {
         </div>
       )}
 
-      {/* Map modal */}
-      {mapOpen && selectedReportForMap && (
+      {mapOpen && trackingReport && (
         <CrimeLiveModel
-          report={selectedReportForMap}
+          report={trackingReport}
           onClose={() => {
             setMapOpen(false);
-            setSelectedReportForMap(null);
+            setTrackingReport(null);
           }}
         />
       )}
 
-      {/* Preview modal */}
-      {selectedReportForPreview && (
-        <ReportPreviewModal
-          report={selectedReportForPreview}
-          onClose={() => setSelectedReportForPreview(null)}
-        />
+      {selectedReport && (
+        <ReportPreviewModal report={selectedReport} onClose={() => setSelectedReport(null)} />
       )}
     </div>
   );
 };
 
-export default CrimeReport;
+export default BranchCrime;

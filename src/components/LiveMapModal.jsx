@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import io from 'socket.io-client';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import socket from '../socket'; // ✅ Use shared socket instance
+
 
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoibmFpbWE3NzciLCJhIjoiY21kZzBxdTVzMGdhNzJrcjFuaW8yM2QzdSJ9.oxnbUzrKit3T1bIJ2YSFwg';
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
-const socket = io('https://security991.onrender.com'); // Replace with your socket server
+
 
 const getStorageKey = (reportId) => `report_chat_${reportId}`;
 

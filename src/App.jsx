@@ -29,6 +29,11 @@ import DistrictPersonalReport from './pages/DistrictPersonalReport';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import UnAuthorized from './pages/UnAuthorized';
 import UnAuthenticatedRoutes from './components/UnAuthenticatedRoutes';
+import BranchDashboard from './pages/BranchDashboard';
+import BranchCrime from './pages/BranchCrime';
+import BranchPersonalReport from './pages/BranchPersonalReport';
+import DistrictProtectedRoute from './components/DistrictProtectedRoute';
+import BrancheProtectedRoute from './components/BranchProtectedRoute';
 
 function App() {
   const location = useLocation();
@@ -47,7 +52,9 @@ function App() {
     
      
     <Routes>
-      <Route path="/home" element={<HomePage />} />
+      <Route path="/" element={<HomePage />} />
+   
+
        <Route path="/login" element={<UnAuthenticatedRoutes children={<Login />} />} />
  
 
@@ -61,7 +68,7 @@ function App() {
   >
 
     {/* start admin Routes */}
-    <Route index element={<AdminProtectedRoute children={<Dashboard />} />} />
+    <Route path='/dashboard' element={<AdminProtectedRoute children={<Dashboard />} />} />
     <Route path="personal-reports" element={<AdminProtectedRoute children={<PersonalReport />} />} />
     <Route path="crime-reports" element={<AdminProtectedRoute children={<CrimeReport />} />} />
     <Route path="citizens" element={<AdminProtectedRoute children={<CitizenList />} />} />
@@ -74,13 +81,20 @@ function App() {
     
     {/* end admin Routes */}
 
-    <Route path="/district-dashboard" element={<DistrictDashboard />}/>
-    <Route path="/district-crime-reports" element={<DisctrictCrime />} />
-    <Route path="/district-personal-reports" element={<DistrictPersonalReport />} />
-    <Route path="/district-branches" element={<DistricBranches />} />
+    {/* ditrit routes */}
+    <Route path="/district-dashboard" element={<DistrictProtectedRoute><DistrictDashboard /></DistrictProtectedRoute>}/>
+   <Route path="/district-personal-reports" element={<DistrictProtectedRoute><DistrictPersonalReport /></DistrictProtectedRoute>} />
+    <Route path="/district-crime-reports" element={<DistrictProtectedRoute><DisctrictCrime /></DistrictProtectedRoute>} />
+   <Route path="/district-branches" element={<DistrictProtectedRoute><DistricBranches /></DistrictProtectedRoute>} />
+    {/*end  ditrit routes */}
+     <Route path="/branch-dashboard" element={<BrancheProtectedRoute><BranchDashboard /></BrancheProtectedRoute>}/>
+    <Route path="/branch-personal-reports" element={<BrancheProtectedRoute><BranchPersonalReport /></BrancheProtectedRoute>} />
+     <Route path="/branch-crime-reports" element={<BrancheProtectedRoute><BranchCrime /></BrancheProtectedRoute>} />
+    
 
 
   </Route>
+  
 
   <Route path="/unauthorized" element={<UnAuthorized />} />
 </Routes>

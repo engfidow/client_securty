@@ -20,7 +20,9 @@ const Register = () => {
   const districts = [
     "Abdiaziz", "Bondhere", "Daynile", "Dharkenley", "Hamar Jajab",
     "Hamar Weyne", "Hodan", "Howlwadaag", "Kahda", "Karaan",
-    "Shangani", "Shibis", "Waberi", "Wadajir", "Warta Nabadda", "Yaqshid"
+    "Shangani", "Shibis", "Waberi", "Wadajir", 
+    "Warta Nabadda", "Yaqshid","Hiliwa","Daru-salaam",
+    "Gubadley","Garasbaaley"
   ];
 
   const handleChange = (e) => {

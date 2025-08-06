@@ -106,37 +106,38 @@ const PersonalReport = () => {
                       value={report.status}
                       disabled={updatingId === report._id}
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
-                      className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white w-36"
+                      className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
-                      <option
-                        value="pending"
-                        disabled={report.status !== "pending"}
-                        className={`text-sm ${report.status !== "pending" ? "text-gray-400" : ""}`}
-                      >
-                        Pending
-                      </option>
-                      <option
-                        value="reviewed"
-                        disabled={report.status === "pending" || report.status === "solved" || report.status === "fake"}
-                        className={`text-sm ${report.status === "pending" || report.status === "solved" || report.status === "fake" ? "text-gray-400" : ""}`}
-                      >
-                        Reviewed
-                      </option>
-                      <option
-                        value="solved"
-                        disabled={report.status !== "solved" && report.status !== "reviewed"}
-                        className={`text-sm ${report.status !== "solved" && report.status !== "reviewed" ? "text-gray-400" : ""}`}
-                      >
-                        Solved
-                      </option>
-                      <option
-                        value="fake"
-                        disabled={report.status !== "fake" && report.status !== "reviewed"}
-                        className={`text-sm ${report.status !== "fake" && report.status !== "reviewed" ? "text-gray-400" : ""}`}
-                      >
-                        Fake
-                      </option>
+                      {/* If status is 'pending', show all options */}
+                      {report.status === "pending" && (
+                        <>
+                          <option value="pending">Pending</option>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'reviewed', hide 'pending' */}
+                      {report.status === "reviewed" && (
+                        <>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'solved', only show 'solved' */}
+                      {report.status === "solved" && (
+                        <option value="solved">Solved</option>
+                      )}
+
+                      {/* If status is 'fake', only show 'fake' */}
+                      {report.status === "fake" && (
+                        <option value="fake">Fake</option>
+                      )}
                     </select>
+
 
 
                   </td>
