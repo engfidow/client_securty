@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import UserMenu from '../components/DropdownProfile';
 import ThemeToggle from '../components/ThemeToggle';
@@ -11,6 +12,7 @@ function Header({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -144,7 +146,9 @@ function Header({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
               </button>
 
               {dropdownOpen && (
+
                 <div   ref={dropdownRef} className="absolute right-0 z-50 w-80 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700">
+
                   <div className="p-2 max-h-96 overflow-y-auto">
                     {notifications.length === 0 ? (
                       <div className="text-gray-500 dark:text-gray-300 text-sm text-center py-4">

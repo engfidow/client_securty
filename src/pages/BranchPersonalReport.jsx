@@ -38,23 +38,25 @@ const BranchPersonalReport = () => {
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
-  setUpdatingId(id);
-  try {
-    const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
-    const res = await axios.patch(`${API_URL}/status/${id}`, {
-      status: newStatus,
-      updatedBy: user?._id,
-    });
-    setMessage({ type: 'success', text: res.data.message });
-    fetchReports();
-  } catch (err) {
-    console.error(err);
-    setMessage({ type: 'error', text: 'Failed to update status' });
-  } finally {
-    setUpdatingId(null);
-    setTimeout(() => setMessage(null), 2000);
-  }
-};
+
+    setUpdatingId(id);
+    try {
+      const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
+      const res = await axios.patch(`${API_URL}/status/${id}`, {
+        status: newStatus,
+        updatedBy: user?._id,
+      });
+      setMessage({ type: 'success', text: res.data.message });
+      fetchReports();
+    } catch (err) {
+      console.error(err);
+      setMessage({ type: 'error', text: 'Failed to update status' });
+    } finally {
+      setUpdatingId(null);
+      setTimeout(() => setMessage(null), 2000);
+    }
+  };
+
 
   const handleTrack = (report) => {
     setSelectedReportForMap(report);
@@ -69,9 +71,10 @@ const BranchPersonalReport = () => {
 
       {message && (
         <div
-          className={`mb-4 px-4 py-2 rounded ${
-            message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-          }`}
+
+          className={`mb-4 px-4 py-2 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`}
+
         >
           {message.text}
         </div>
@@ -126,11 +129,37 @@ const BranchPersonalReport = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
-                      {report.status === "pending" && <option value="pending">Pending</option>}
-                      <option value="reviewed">Reviewed</option>
-                      <option value="solved">Solved</option>
-                      <option value="fake">Fake</option>
+
+                      {/* If status is 'pending', show all options */}
+                      {report.status === "pending" && (
+                        <>
+                          <option value="pending">Pending</option>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'reviewed', hide 'pending' */}
+                      {report.status === "reviewed" && (
+                        <>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'solved', only show 'solved' */}
+                      {report.status === "solved" && (
+                        <option value="solved">Solved</option>
+                      )}
+
+                      {/* If status is 'fake', only show 'fake' */}
+                      {report.status === "fake" && (
+                        <option value="fake">Fake</option>
+                      )}
                     </select>
+
                   </td>
                   <td className="p-3 text-center">
                     <button
