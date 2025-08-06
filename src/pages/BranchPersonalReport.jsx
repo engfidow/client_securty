@@ -38,6 +38,7 @@ const BranchPersonalReport = () => {
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
+
     setUpdatingId(id);
     try {
       const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
@@ -56,6 +57,7 @@ const BranchPersonalReport = () => {
     }
   };
 
+
   const handleTrack = (report) => {
     setSelectedReportForMap(report);
     setMapOpen(true);
@@ -69,8 +71,10 @@ const BranchPersonalReport = () => {
 
       {message && (
         <div
+
           className={`mb-4 px-4 py-2 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
             }`}
+
         >
           {message.text}
         </div>
@@ -125,6 +129,7 @@ const BranchPersonalReport = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
+
                       {/* If status is 'pending', show all options */}
                       {report.status === "pending" && (
                         <>

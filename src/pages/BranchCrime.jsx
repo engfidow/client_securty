@@ -119,6 +119,7 @@ const BranchCrime = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
+
                       {/* If status is 'pending', show all options */}
                       {report.status === "pending" && (
                         <>
@@ -149,6 +150,7 @@ const BranchCrime = () => {
                       )}
                     </select>
 
+
                   </td>
                   <td className="p-3 text-center">
                     <button
@@ -158,7 +160,7 @@ const BranchCrime = () => {
                       }}
                       disabled={report.status !== "reviewed"}
                       className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300"} text-white text-xs rounded`}
-                    >
+                        >
                       Track
                     </button>
                   </td>

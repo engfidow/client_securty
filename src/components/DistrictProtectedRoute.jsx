@@ -1,4 +1,3 @@
-
 import { Navigate } from 'react-router-dom';
 
 const DistrictProtectedRoute = ({ children }) => {
@@ -11,7 +10,9 @@ const DistrictProtectedRoute = ({ children }) => {
   }
 
   // Check if the user has admin role
+
   if (user.role !== 'police') {
+
     return <Navigate to="/unauthorized" replace />;
   }
 
@@ -19,3 +20,4 @@ const DistrictProtectedRoute = ({ children }) => {
 };
 
 export default DistrictProtectedRoute;
+

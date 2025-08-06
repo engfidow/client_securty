@@ -100,6 +100,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         </div>
 
         {/* Navigation */}
+
         <nav className="space-y-2">
           {role === 'admin' && navItem('/dashboard', <MdDashboard size={20} />, 'Dashboard')}
           {role === 'police' && navItem('/district-dashboard', <MdDashboard size={20} />, 'Dashboard')}
@@ -128,6 +129,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             <span>Logout</span>
           </button>
         </nav>
+
 
       </div>
     </>

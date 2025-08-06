@@ -1,4 +1,3 @@
-
 import { Navigate } from 'react-router-dom';
 
 const BrancheProtectedRoute = ({ children }) => {
@@ -19,3 +18,4 @@ const BrancheProtectedRoute = ({ children }) => {
 };
 
 export default BrancheProtectedRoute;
+

@@ -21,19 +21,19 @@ const ReportPreviewModal = ({ report, onClose }) => {
          
            {report.branch && (<p><strong>Branch:</strong> {report.branch }</p>)}
            {/* ✅ Added Updated By and Updated At */}
-           
+
           {report?.updatedBy?.role && (
             <p><strong>Role By:</strong> {report?.updatedBy.role} ({report?.updatedBy.email})</p>
           )}
          
-         
-          {/* ✅ Added Updated By and Updated At */}
+
           {report?.updatedBy && (
             <p><strong>Updated By:</strong> {report.updatedBy.name} ({report.updatedBy.email})</p>
           )}
           {report.updatedAt && (
             <p><strong>Last Updated:</strong> {new Date(report.updatedAt).toLocaleString()}</p>
           )}
+
           
           <div className="grid grid-cols-3 gap-2 mt-4">
             {report.images?.map((img, i) => (

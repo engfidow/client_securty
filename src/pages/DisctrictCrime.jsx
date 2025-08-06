@@ -44,6 +44,7 @@ const DisctrictCrime = () => {
     setUpdatingId(id);
     try {
 
+
       const user = JSON.parse(localStorage.getItem('user'));
       const res = await axios.patch(`https://security991.onrender.com/api/reports/status/${id}`,
         {

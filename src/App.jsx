@@ -35,6 +35,9 @@ import BranchPersonalReport from './pages/BranchPersonalReport';
 import DistrictProtectedRoute from './components/DistrictProtectedRoute';
 import BrancheProtectedRoute from './components/BranchProtectedRoute';
 
+import ForgotPassword from './pages/ForgotPassword';
+
+
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -56,6 +59,7 @@ function App() {
    
 
        <Route path="/login" element={<UnAuthenticatedRoutes children={<Login />} />} />
+       <Route path="/forgot-password" element={<UnAuthenticatedRoutes children={<ForgotPassword />} />} />
  
 
   <Route
