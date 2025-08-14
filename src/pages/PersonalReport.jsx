@@ -19,41 +19,41 @@ const PersonalReport = () => {
 
 
 
- const fetchReports = async () => {
-  try {
-    const res = await axios.get(API_URL);
-    const personalReports = res.data.filter((report) => report.type === "personal");
-    setReports(personalReports);
-  } catch (err) {
-    console.error('Failed to load reports:', err);
-  } finally {
-    setLoading(false);
-  }
-};
+  const fetchReports = async () => {
+    try {
+      const res = await axios.get(API_URL);
+      const personalReports = res.data.filter((report) => report.type === "personal");
+      setReports(personalReports);
+    } catch (err) {
+      console.error('Failed to load reports:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   useEffect(() => {
     fetchReports();
   }, []);
 
- const handleStatusChange = async (id, newStatus) => {
-  setUpdatingId(id);
-  try {
-    const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
-    const res = await axios.patch(`${API_URL}/status/${id}`, {
-      status: newStatus,
-      updatedBy: user?._id,
-    });
-    setMessage({ type: 'success', text: res.data.message });
-    fetchReports();
-  } catch (err) {
-    console.error(err);
-    setMessage({ type: 'error', text: 'Failed to update status' });
-  } finally {
-    setUpdatingId(null);
-    setTimeout(() => setMessage(null), 2000);
-  }
-};
+  const handleStatusChange = async (id, newStatus) => {
+    setUpdatingId(id);
+    try {
+      const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
+      const res = await axios.patch(`${API_URL}/status/${id}`, {
+        status: newStatus,
+        updatedBy: user?._id,
+      });
+      setMessage({ type: 'success', text: res.data.message });
+      fetchReports();
+    } catch (err) {
+      console.error(err);
+      setMessage({ type: 'error', text: 'Failed to update status' });
+    } finally {
+      setUpdatingId(null);
+      setTimeout(() => setMessage(null), 2000);
+    }
+  };
 
   const handleTrack = (report) => {
     setSelectedReportForMap(report);
@@ -108,18 +108,44 @@ const PersonalReport = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
-                     
-                      {report.status === "pending" && <option value="pending">Pending</option>}
-                      <option value="reviewed">Reviewed</option>
-                      <option value="solved">Solved</option>
-                      <option value="fake">Fake</option>
+                      {/* If status is 'pending', show all options */}
+                      {report.status === "pending" && (
+                        <>
+                          <option value="pending">Pending</option>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'reviewed', hide 'pending' */}
+                      {report.status === "reviewed" && (
+                        <>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'solved', only show 'solved' */}
+                      {report.status === "solved" && (
+                        <option value="solved">Solved</option>
+                      )}
+
+                      {/* If status is 'fake', only show 'fake' */}
+                      {report.status === "fake" && (
+                        <option value="fake">Fake</option>
+                      )}
                     </select>
+
+
+
                   </td>
                   <td className="p-3 text-center">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleTrack(report); }}
-                       disabled={report.status !== "reviewed"}
-                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700":"bg-blue-300"} text-white text-xs rounded`}
+                      disabled={report.status !== "reviewed"}
+                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300"} text-white text-xs rounded`}
                     >
                       Track
                     </button>
@@ -132,21 +158,21 @@ const PersonalReport = () => {
       )}
 
       {mapOpen && selectedReportForMap && (
-  <LiveMapModal
-    report={selectedReportForMap}
-    onClose={() => {
-      setMapOpen(false);
-      setSelectedReportForMap(null);
-    }}
-  />
-)}
+        <LiveMapModal
+          report={selectedReportForMap}
+          onClose={() => {
+            setMapOpen(false);
+            setSelectedReportForMap(null);
+          }}
+        />
+      )}
 
-{selectedReportForPreview && (
-  <ReportPreviewModal
-    report={selectedReportForPreview}
-    onClose={() => setSelectedReportForPreview(null)}
-  />
-)}
+      {selectedReportForPreview && (
+        <ReportPreviewModal
+          report={selectedReportForPreview}
+          onClose={() => setSelectedReportForPreview(null)}
+        />
+      )}
 
     </div>
   );

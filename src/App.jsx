@@ -34,7 +34,9 @@ import BranchCrime from './pages/BranchCrime';
 import BranchPersonalReport from './pages/BranchPersonalReport';
 import DistrictProtectedRoute from './components/DistrictProtectedRoute';
 import BrancheProtectedRoute from './components/BranchProtectedRoute';
+
 import ForgotPassword from './pages/ForgotPassword';
+
 
 function App() {
   const location = useLocation();
@@ -53,7 +55,9 @@ function App() {
     
      
     <Routes>
-      <Route path="/home" element={<HomePage />} />
+      <Route path="/" element={<HomePage />} />
+   
+
        <Route path="/login" element={<UnAuthenticatedRoutes children={<Login />} />} />
        <Route path="/forgot-password" element={<UnAuthenticatedRoutes children={<ForgotPassword />} />} />
  
@@ -68,7 +72,7 @@ function App() {
   >
 
     {/* start admin Routes */}
-    <Route index element={<AdminProtectedRoute children={<Dashboard />} />} />
+    <Route path='/dashboard' element={<AdminProtectedRoute children={<Dashboard />} />} />
     <Route path="personal-reports" element={<AdminProtectedRoute children={<PersonalReport />} />} />
     <Route path="crime-reports" element={<AdminProtectedRoute children={<CrimeReport />} />} />
     <Route path="citizens" element={<AdminProtectedRoute children={<CitizenList />} />} />
@@ -94,6 +98,7 @@ function App() {
 
 
   </Route>
+  
 
   <Route path="/unauthorized" element={<UnAuthorized />} />
 </Routes>

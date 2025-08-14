@@ -10,7 +10,9 @@ const DistrictProtectedRoute = ({ children }) => {
   }
 
   // Check if the user has admin role
-  if (user.role !== 'district') {
+
+  if (user.role !== 'police') {
+
     return <Navigate to="/unauthorized" replace />;
   }
 
@@ -18,3 +20,4 @@ const DistrictProtectedRoute = ({ children }) => {
 };
 
 export default DistrictProtectedRoute;
+

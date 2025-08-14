@@ -119,11 +119,38 @@ const BranchCrime = () => {
                       onChange={(e) => handleStatusChange(report._id, e.target.value)}
                       className="px-2 py-1 rounded border text-sm dark:bg-gray-900 dark:text-white"
                     >
-                      {report.status === "pending" && <option value="pending">Pending</option>}
-                      <option value="reviewed">Reviewed</option>
-                      <option value="solved">Solved</option>
-                      <option value="fake">Fake</option>
+
+                      {/* If status is 'pending', show all options */}
+                      {report.status === "pending" && (
+                        <>
+                          <option value="pending">Pending</option>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'reviewed', hide 'pending' */}
+                      {report.status === "reviewed" && (
+                        <>
+                          <option value="reviewed">Reviewed</option>
+                          <option value="solved">Solved</option>
+                          <option value="fake">Fake</option>
+                        </>
+                      )}
+
+                      {/* If status is 'solved', only show 'solved' */}
+                      {report.status === "solved" && (
+                        <option value="solved">Solved</option>
+                      )}
+
+                      {/* If status is 'fake', only show 'fake' */}
+                      {report.status === "fake" && (
+                        <option value="fake">Fake</option>
+                      )}
                     </select>
+
+
                   </td>
                   <td className="p-3 text-center">
                     <button
@@ -132,8 +159,8 @@ const BranchCrime = () => {
                         handleTrack(report);
                       }}
                       disabled={report.status !== "reviewed"}
-                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700":"bg-blue-300"} text-white text-xs rounded`}
-                    >
+                      className={`px-3 py-1 ${report.status === "reviewed" ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300"} text-white text-xs rounded`}
+                        >
                       Track
                     </button>
                   </td>

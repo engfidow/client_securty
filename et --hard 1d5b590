@@ -11,16 +11,4 @@
 [33m3e3923e[m HEAD@{10}: commit: push track map mapps
 [33m7c7a977[m HEAD@{11}: commit: feedbac ui
 [33m0ffbc96[m HEAD@{12}: clone: from github.com:engfidow/client_securty.git
-[33m7e96406[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
-[33m1d5b590[m HEAD@{1}: commit: new updated
-[33m7e96406[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{2}: commit: push new update
-[33m536d93a[m HEAD@{3}: pull origin main --rebase: Fast-forward
-[33m320e1ad[m HEAD@{4}: reset: moving to HEAD
-[33m320e1ad[m HEAD@{5}: checkout: moving from main to main
-[33m320e1ad[m HEAD@{6}: commit: push new update of district-crime-reports
-[33mb129de0[m HEAD@{7}: commit: push new update client
-[33m3c7f0ab[m HEAD@{8}: commit: adding chat
-[33m2c16006[m HEAD@{9}: commit: new update
-[33m3e3923e[m HEAD@{10}: commit: push track map mapps
-[33m7c7a977[m HEAD@{11}: commit: feedbac ui
-[33m0ffbc96[m HEAD@{12}: clone: from github.com:engfidow/client_securty.git
+

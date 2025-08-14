@@ -18,3 +18,4 @@ const BrancheProtectedRoute = ({ children }) => {
 };
 
 export default BrancheProtectedRoute;
+
