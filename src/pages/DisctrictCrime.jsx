@@ -22,7 +22,7 @@ const DisctrictCrime = () => {
     if (!userId) return console.error('User not found in localStorage');
 
     try {
-      const res = await axios.get("https://security991.onrender.com/api/reports");
+      const res = await axios.get("https://seversecurity-production.up.railway.app/api/reports");
       const filtered = res.data.filter(
         (report) =>
           report.type === 'crime' &&
@@ -44,7 +44,7 @@ const DisctrictCrime = () => {
     setUpdatingId(id);
     try {
       const user = JSON.parse(localStorage.getItem('user')); // Get logged-in user
-      const res = await axios.patch(`https://security991.onrender.com/api/reports/status/${id}`, {
+      const res = await axios.patch(`https://seversecurity-production.up.railway.app/api/reports/status/${id}`, {
         status: newStatus,
         updatedBy: user?._id,
       });
@@ -99,7 +99,7 @@ const DisctrictCrime = () => {
                       {report.images?.map((img, i) => (
                         <img
                           key={i}
-                          src={`https://security991.onrender.com/uploads/report/${img}`}
+                          src={`https://seversecurity-production.up.railway.app/uploads/report/${img}`}
                           alt="crime"
                           className="w-12 h-12 object-cover rounded border"
                         />

@@ -39,7 +39,7 @@ const DistricBranches = () => {
   }
 
   try {
-    const res = await axios.get(`https://security991.onrender.com/api/users/branches/${district}`, {
+    const res = await axios.get(`https://seversecurity-production.up.railway.app/api/users/branches/${district}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setUsersByDistrict({ [district]: res.data });
@@ -98,8 +98,8 @@ const DistricBranches = () => {
 
     try {
       const url = editingUser
-        ? `https://security991.onrender.com/api/users/update/${editingUser._id}`
-        : `https://security991.onrender.com/api/users/register`;
+        ? `https://seversecurity-production.up.railway.app/api/users/update/${editingUser._id}`
+        : `https://seversecurity-production.up.railway.app/api/users/register`;
       const method = editingUser ? axios.put : axios.post;
       await method(url, formData, { headers: { Authorization: `Bearer ${token}` } });
       fetchUsers();
@@ -114,7 +114,7 @@ const DistricBranches = () => {
   const handleDelete = async (userId) => {
     const token = localStorage.getItem('token');
     if (window.confirm('Are you sure?')) {
-      await axios.delete(`https://security991.onrender.com/api/users/delete/${userId}`, {
+      await axios.delete(`https://seversecurity-production.up.railway.app/api/users/delete/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();

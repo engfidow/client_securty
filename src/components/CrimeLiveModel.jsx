@@ -46,7 +46,7 @@ const CrimeLiveModel = ({ report, onClose }) => {
 
   useEffect(() => {
     if (report.type === 'personal') {
-      socketRef.current = io('https://security991.onrender.com');
+      socketRef.current = io('https://seversecurity-production.up.railway.app');
 
       socketRef.current.on('updateLocation', (data) => {
         if (data.reportId === report._id) {

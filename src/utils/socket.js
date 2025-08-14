@@ -1,7 +1,7 @@
 // utils/socket.js
 import { io } from 'socket.io-client';
 
-const socket = io('https://security991.onrender.com', {
+const socket = io('https://seversecurity-production.up.railway.app', {
   transports: ['websocket'],
   autoConnect: true,
 });

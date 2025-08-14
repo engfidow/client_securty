@@ -27,7 +27,7 @@ const BranchDashboard = () => {
     if (!branch) return;
     const fetchData = async () => {
       try {
-        const res = await axios.get(`https://security991.onrender.com/api/reports/branch-dashboard/${branch}`);
+        const res = await axios.get(`https://seversecurity-production.up.railway.app/api/reports/branch-dashboard/${branch}`);
         setStats(res.data);
       } catch (err) {
         console.error('Error loading dashboard:', err);

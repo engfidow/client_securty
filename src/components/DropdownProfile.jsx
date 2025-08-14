@@ -39,7 +39,7 @@ function DropdownProfile({ align }) {
   };
 
   // Construct image URL
-  const imageUrl = user?.image ? `https://security991.onrender.com/uploads/${user.image}` : DefaultAvatar;
+  const imageUrl = user?.image ? `https://seversecurity-production.up.railway.app/uploads/${user.image}` : DefaultAvatar;
 
   return (
     <div className="relative inline-flex">

@@ -10,7 +10,7 @@ const FeedbackTable = () => {
 
   const fetchFeedbacks = async () => {
     try {
-      const res = await axios.get('https://security991.onrender.com/api/feedbacks/all');
+      const res = await axios.get('https://seversecurity-production.up.railway.app/api/feedbacks/all');
       setFeedbacks(res.data);
     } catch (err) {
       console.error('Failed to load feedbacks:', err);

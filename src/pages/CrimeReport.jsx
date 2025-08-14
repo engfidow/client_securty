@@ -15,7 +15,7 @@ const CrimeReport = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [selectedReportForPreview, setSelectedReportForPreview] = useState(null);
   const [selectedReportForMap, setSelectedReportForMap] = useState(null);
-  const API_URL = 'https://security991.onrender.com/api/reports'; // <-- your backend endpoint
+  const API_URL = 'https://seversecurity-production.up.railway.app/api/reports'; // <-- your backend endpoint
 
   
 
@@ -92,7 +92,7 @@ const handleStatusChange = async (id, newStatus) => {
                   <td className="p-3">
                     <div className="flex flex-wrap gap-2">
                       {report.images?.map((img, i) => (
-                        <img key={i} src={`https://security991.onrender.com/uploads/report/${img}`} alt="crime" className="w-12 h-12 object-cover rounded border" />
+                        <img key={i} src={`https://seversecurity-production.up.railway.app/uploads/report/${img}`} alt="crime" className="w-12 h-12 object-cover rounded border" />
                       ))}
                     </div>
                   </td>

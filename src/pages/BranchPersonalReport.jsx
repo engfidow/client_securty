@@ -14,7 +14,7 @@ const BranchPersonalReport = () => {
   const [selectedReportForMap, setSelectedReportForMap] = useState(null);
   const [selectedReportForPreview, setSelectedReportForPreview] = useState(null);
 
-  const API_URL = 'https://security991.onrender.com/api/reports';
+  const API_URL = 'https://seversecurity-production.up.railway.app/api/reports';
   const user = JSON.parse(localStorage.getItem('user'));
 
   const fetchReports = async () => {
@@ -106,7 +106,7 @@ const BranchPersonalReport = () => {
                       {report.images?.map((img, i) => (
                         <img
                           key={i}
-                          src={`https://security991.onrender.com/uploads/report/${img}`}
+                          src={`https://seversecurity-production.up.railway.app/uploads/report/${img}`}
                           alt="crime"
                           className="w-12 h-12 object-cover rounded border"
                         />

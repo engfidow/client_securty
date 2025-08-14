@@ -16,7 +16,7 @@ const Profile = () => {
 
   // Construct image URL - assuming images are served from /uploads/ on localhost
   const imageUrl = user.image 
-    ? `https://security991.onrender.com/uploads/${user.image}` 
+    ? `https://seversecurity-production.up.railway.app/uploads/${user.image}` 
     : null;
 
   return (

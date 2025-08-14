@@ -7,7 +7,7 @@ const Reports = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await axios.get('https://security991.onrender.com/api/reports');
+        const res = await axios.get('https://seversecurity-production.up.railway.app/api/reports');
         setReports(res.data);
       } catch (err) {
         console.error('Error fetching reports:', err.message);

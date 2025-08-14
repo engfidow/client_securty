@@ -30,7 +30,7 @@ const DistrictUsers = () => {
   const fetchUsers = async () => {
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get('https://security991.onrender.com/api/users/district-users', {
+      const res = await axios.get('https://seversecurity-production.up.railway.app/api/users/district-users', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsersByDistrict(res.data);
@@ -88,8 +88,8 @@ const DistrictUsers = () => {
 
     try {
       const url = editingUser
-        ? `https://security991.onrender.com/api/users/update/${editingUser._id}`
-        : `https://security991.onrender.com/api/users/register`;
+        ? `https://seversecurity-production.up.railway.app/api/users/update/${editingUser._id}`
+        : `https://seversecurity-production.up.railway.app/api/users/register`;
       const method = editingUser ? axios.put : axios.post;
       await method(url, formData, { headers: { Authorization: `Bearer ${token}` } });
       fetchUsers();
@@ -104,7 +104,7 @@ const DistrictUsers = () => {
   const handleDelete = async (userId) => {
     const token = localStorage.getItem('token');
     if (window.confirm('Are you sure?')) {
-      await axios.delete(`https://security991.onrender.com/api/users/delete/${userId}`, {
+      await axios.delete(`https://seversecurity-production.up.railway.app/api/users/delete/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();

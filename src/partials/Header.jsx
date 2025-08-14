@@ -41,7 +41,7 @@ function Header({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
     // ✅ Fetch unread notifications from backend
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get(`https://security991.onrender.com/api/notifications/${user._id}`);
+        const res = await axios.get(`https://seversecurity-production.up.railway.app/api/notifications/${user._id}`);
         const notifs = res.data.data || [];
         const formatted = notifs.map(n => ({
           ...n,
@@ -82,7 +82,7 @@ function Header({ sidebarOpen, setSidebarOpen, variant = 'default' }) {
   // ✅ Handle click: mark read + navigate
   const handleViewNotification = async (notif) => {
     try {
-      await axios.put(`https://security991.onrender.com/api/notifications/read/${notif._id}`);
+      await axios.put(`https://seversecurity-production.up.railway.app/api/notifications/read/${notif._id}`);
     } catch (err) {
       console.error('Failed to mark notification as read', err);
     }

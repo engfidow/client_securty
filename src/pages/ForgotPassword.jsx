@@ -20,7 +20,7 @@ const ForgotPassword = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('https://security991.onrender.com/api/users/forgot-password/send-otp', {
+      const res = await axios.post('https://seversecurity-production.up.railway.app/api/users/forgot-password/send-otp', {
         phone
       });
 
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const res = await axios.post('https://security991.onrender.com/api/users/forgot-password/reset', {
+      const res = await axios.post('https://seversecurity-production.up.railway.app/api/users/forgot-password/reset', {
         phone,
         otp,
         newPassword
